@@ -1,5 +1,5 @@
 window.onload = init();
-
+ 
 var app_added = false;
  
 function init() {
