@@ -13,7 +13,9 @@ function init() {
 			console.log('App added');
 		});
 		VK.api("photos.get", {"owner_id": 80417072}, function (data) { 
-			console.log("DATA:" + data.response[0].photo_130); 
+			for(var i=0; i<data.response.lenght; i++) {
+				console.log("DATA:" + data.response[i].photo_medium);
+			}
 		});
 	}, function() { 
 		// API initialization failed 
