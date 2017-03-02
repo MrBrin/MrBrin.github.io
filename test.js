@@ -12,10 +12,10 @@ function init() {
 			app_added = true;
 			console.log('App added');
 		});
-		VK.api("photos.get", {"owner_id": 80417072}, function (data) { 
-			for(var i=0; i<data.response.length; i++) {
-				console.log("DATA:" + data.response[i].photo_medium);
-			}
+		VK.api("users.get", {"fields": "photo_50"}, function (data) { 
+			//for(var i=0; i<data.response.length; i++) {
+			console.log("DATA:" + data.response.photo_50);
+			//}
 		});
 	}, function() { 
 		// API initialization failed 
