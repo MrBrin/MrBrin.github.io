@@ -15,7 +15,7 @@ function init() {
 		VK.api("users.get", {fields: "photo_50"}, function (data) { 
 			//for(var i=0; i<data.response.length; i++) {
 			if (data.response) {
-				console.log(data.response.photo_50);
+				console.log(data.response);
 			}			
 			//}
 		});
