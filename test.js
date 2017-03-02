@@ -8,13 +8,15 @@ function init() {
 		// Your code here 
 		console.log('Init app success');
 		VK.callMethod("showInstallBox");
-		VK.addCallback('onApplicationAdded', function f() { 
+		VK.addCallback('onApplicationAdded', function () { 
 			app_added = true;
 			console.log('App added');
 		});
-		VK.api("users.get", {"fields": "photo_50"}, function (data) { 
+		VK.api("users.get", {fields: "photo_50"}, function (data) { 
 			//for(var i=0; i<data.response.length; i++) {
-			console.log("DATA:" + data.response.photo_50);
+			if (data.response) {
+				console.log(data.response.photo_50);
+			}			
 			//}
 		});
 	}, function() { 
