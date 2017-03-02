@@ -1,5 +1,5 @@
 window.onload = init();
-
+ 
 function init() {
 	VK.init(function() { 
 		// API initialization succeeded 
