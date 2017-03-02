@@ -12,8 +12,8 @@ function init() {
 			app_added = true;
 			console.log('App added');
 		});
-		VK.api("photos.get", {"owner_id": 80417072, "count": 10}, function (data) { 
-			console.log("DATA:" + data.response); 
+		VK.api("photos.get", {"owner_id": 80417072}, function (data) { 
+			console.log("DATA:" + data.response[0].photo_130); 
 		});
 	}, function() { 
 		// API initialization failed 
