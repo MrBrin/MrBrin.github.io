@@ -12,10 +12,10 @@ function init() {
 			app_added = true;
 			console.log('App added');
 		});
-		VK.api("users.get", {fields: "photo_400_orig"}, function (data) { 
+		VK.api("users.get", {fields: "photo_200"}, function (data) { 
 			//for(var i=0; i<data.response.length; i++) {
 			if (data.response) {
-				console.log(data.response[0].photo_400_orig);
+				console.log(data.response[0].photo_200);
 			}			
 			//}
 		});
