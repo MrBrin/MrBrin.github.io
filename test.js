@@ -42,7 +42,7 @@ function init() {
 	app.stage.addChild(strip);
 	
 	app.ticker.add(function() {
-	}
+	});
 	
 }
 
