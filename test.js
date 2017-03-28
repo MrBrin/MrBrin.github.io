@@ -58,11 +58,11 @@ function init() {
 	
 	function onDocumentMouseClick( event ) {
 		points[0] = points[0] + 1;
-		points[3] = points[3] + 1;
-		points[1] = points[1] - 1;
+		points[6] = points[6] + 1;
+		points[2] = points[2] - 1;
 		
-		points[2] = points[2] + 2;
-		points[5] = points[5] - 2;
+		points[4] = points[4] + 2;
+		points[10] = points[10] - 2;
 		count++;
 		console.log(count);
 	}
