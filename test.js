@@ -29,8 +29,12 @@ function init() {
 
 function init() {
 
-	var app = new PIXI.Application();
-	document.body.appendChild(app.view);
+	var renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight);
+	document.body.appendChild(renderer.view);
+	var stage = new PIXI.Stage;
+	
+	//var app = new PIXI.Application();
+	//document.body.appendChild(app.view);
 
 	var texture = PIXI.Texture.fromImage('zb-video.png');
 	var points = new Float32Array([50, 50, 600, 50, 600, 150, 50, 50, 600, 150, 50, 150]);
@@ -39,10 +43,13 @@ function init() {
 
 	var strip = new PIXI.mesh.Mesh(texture, points, newUVS, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES);
 
-	app.stage.addChild(strip);
+	//app.stage.addChild(strip);
+	stage.addChild(strip);
 	
-	app.ticker.add(function() {
-	}); 
+	//app.ticker.add(function() {
+	//}); 
+	function draw() { renderer.render(stage); requestAnimationFrame(draw); }
+	draw();
 	
 }
 
