@@ -37,9 +37,9 @@ function init() {
 	//document.body.appendChild(app.view);
 
 	var texture = PIXI.Texture.fromImage('zb-video.png');
-	var points = new Float32Array([50, 50, 600, 50, 600, 150, 50, 50, 600, 150, 50, 150]);
+	var points = new Float32Array([50, 50, 600, 50, 600, 150, 50, 150]);
 	var newUVS = new Float32Array([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]);
-	var indices = new Uint16Array([1, 2, 3, 1, 3, 4]);
+	var indices = new Uint16Array([0, 1, 2, 2, 3, 0]);
 
 	var strip = new PIXI.mesh.Mesh(texture, points, newUVS, indices, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES);
 
