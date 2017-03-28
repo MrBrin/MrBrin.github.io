@@ -62,6 +62,7 @@ function init() {
 		points[2] = points[2] - 1;
 		
 		points[4] = points[4] + 2;
+		points[8] = points[8] + 2;
 		points[10] = points[10] - 2;
 		count++;
 		console.log(count);
