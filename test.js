@@ -37,7 +37,7 @@ function init() {
 	//var app = new PIXI.Application();
 	//document.body.appendChild(app.view);
 
-	var texture = PIXI.Texture.fromImage('zb-video.png');
+	var texture = PIXI.Texture.fromImage('zb-video2.png');
 	var points = new Float32Array([50, 50, 600, 50, 600, 150, 50, 50, 600, 150, 50, 150]);
 	var newUVS = new Float32Array([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]);
 	var indices = new Uint16Array([0, 2, 1, 3, 4, 5]);
