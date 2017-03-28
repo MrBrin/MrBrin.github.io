@@ -28,6 +28,7 @@ function init() {
 }
 
 function init() {
+	var count = 0;
 
 	var renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.view);
@@ -48,8 +49,23 @@ function init() {
 	
 	//app.ticker.add(function() {
 	//}); 
-	function draw() { renderer.render(stage); requestAnimationFrame(draw); }
+	document.addEventListener('click', onDocumentMouseClick, false);
+	function draw() {
+		renderer.render(stage);
+		requestAnimationFrame(draw);
+	}
 	draw();
+	
+	function onDocumentMouseClick( event ) {
+		points[0] = points[0] + 1;
+		points[3] = points[3] + 1;
+		points[1] = points[1] - 1;
+		
+		points[2] = points[2] + 2;
+		points[5] = points[5] - 2;
+		count++;
+		console.log(count);
+	}
 	
 }
 
