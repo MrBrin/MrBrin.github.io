@@ -73,7 +73,7 @@
 				if ( gui ) gui.destroy();
 				gui = new dat.GUI();
 				gui.add( params, "clearPass" );
-				gui.add( params, "clearColor", [ 'black', 'white', 'blue', 'green', 'red' ] );
+				gui.add( params, "clearColor", [ 'black', 'white', 'blue', 'green', 'red', 'break' ] );
 				gui.add( params, "clearAlpha", 0, 1 );
 				gui.add( params, "texturePass" );
 				gui.add( params, "texturePassOpacity", 0, 1 );
@@ -194,6 +194,7 @@
 					case 'green': newColor = 0x00ff00; break;
 					case 'white': newColor = 0xffffff; break;
 					case 'black': newColor = 0x000000; break;
+					case 'break': newColor = 0xFFFF00AF; break;
 				}
 				clearPass.enabled = params.clearPass;
 				clearPass.clearColor = newColor;
