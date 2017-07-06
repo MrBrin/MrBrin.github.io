@@ -144,8 +144,9 @@
 				texturePass = new THREE.TexturePass();
 				composer.addPass( texturePass );
 				var textureLoader = new THREE.TextureLoader();
-				textureLoader.load( "hardwood2_diffuse.jpg", function( map ) {
+				textureLoader.load( "testDevice.png", function( map ) {
 					texturePass.map = map;
+					texturePass.transparent = true;
 				});
 				cubeTexturePassP = new THREE.CubeTexturePass( cameraP );
 				composer.addPass( cubeTexturePassP );
