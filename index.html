@@ -270,6 +270,9 @@
 				document.body.appendChild( container );
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 100000 );
 				camera.position.z = 3200;
+				
+				
+				
 				//
 				var path = "";
 				var format = '.png';
@@ -280,8 +283,11 @@
 					];
 				var textureCube = new THREE.CubeTextureLoader().load( urls );
 				textureCube.format = THREE.RGBFormat;
+				
+				
+				
 				scene = new THREE.Scene();
-				scene.background = textureCube;
+				//scene.background = textureCube;
 				//
 				var geometry = new THREE.SphereGeometry( 100, 32, 16 );
 				var shader = THREE.FresnelShader;
