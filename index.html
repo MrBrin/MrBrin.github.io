@@ -721,14 +721,14 @@
 					if(heightType=='mono:a') startPos = 3;
 					var len = DDS.mipmaps[qSelect].data.length;
 					var array = [];
-					for(var i=0, i<(len/4 - 1), i++) {
+					for(var i=0; i<(len/4 - 1); i++) {
 						array[i] = DDS.mipmaps[qSelect].data[i*4 + startPos];
 					}
 					var min = Math.min.apply(Math, array);
 					var max = Math.max.apply(Math, array);
 					var med = (max + min)/2;
 
-					for (var i=0, i<(len/4 - 1), i++) {
+					for (var i=0; i<(len/4 - 1); i++) {
 						var value = array[i];
 						if (value < med) {
 							vertices[i] = heightMin + (heightMedian - heightMin)*(value - min)/(med - min);
