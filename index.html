@@ -747,8 +747,27 @@
 					for(var i=0; i<(len/4 - 1); i++) {
 						array[i] = DDS.mipmaps[qSelect].data[i*4 + startPos];
 					}
-					var min = Math.min.apply(Math, array);
-					var max = Math.max.apply(Math, array);
+					var min = min(array);
+					var max = max(array);
+					
+					
+					function min(array) {
+						var mm = array[0];
+						for(var i=1; i<array.length; i++) {
+							if (array[i]<=mm) mm = array[i];
+						}
+						return mm;
+					}
+					function max(array) {
+						var mm = array[0];
+						for(var i=1; i<array.length; i++) {
+							if (array[i]>=mm) mm = array[i];
+						}
+						return mm;
+					}
+					
+					
+					
 					var med = (max + min)/2;
 
 					for (var i=0; i<(len/4 - 1); i++) {
