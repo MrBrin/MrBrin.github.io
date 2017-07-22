@@ -652,6 +652,20 @@
 			var terrainMesh;
 			var heightData = null;
 			var ammoHeightData = null;
+			var DDS;
+
+
+			var loader = new THREE.DDSLoader();
+			DDS = loader.load(
+				'mip.dds',
+				function() {
+					console.log('DDS Loadedd');
+					initGraphics();
+					initPhysics();
+					createObjects();
+					tick();
+				}
+			);
 
 
 
@@ -681,10 +695,10 @@
 				
 
 
-
+				heightData = TerrainGeometry('mipTest0.dds', 'mono:r', 512, 1, -2, 5, 1);
 				// объявляем массив высот и рисуем террейн
-				/*
-				heightData = generateHeight( terrainWidth, terrainDepth, terrainMinHeight, terrainMaxHeight );
+				
+				//heightData = generateHeight( terrainWidth, terrainDepth, terrainMinHeight, terrainMaxHeight );
 				var geometry = new THREE.PlaneBufferGeometry( 100, 100, terrainWidth - 1, terrainDepth - 1 );
 				geometry.rotateX( - Math.PI / 2 );
 				var vertices = geometry.attributes.position.array;
@@ -695,32 +709,32 @@
 				var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xC7C7C7 } );
 				terrainMesh = new THREE.Mesh( geometry, groundMaterial );
 				scene.add( terrainMesh );
-				*/
+				
 
 
 
-				heightData = TerrainGeometry('mip.dds', 'mono:r', 512, 1, -2, 5, 1);
+				
 
 				function TerrainGeometry(heightMap, heightType, bySize, quality, heightMin, heightMax, heightMedian) {
-					var loader = new THREE.DDSLoader();
-					var DDS = loader.load(
-						heightMap,
-						function() {
-							console.log('DDS Loadedd');
-						}
-					);
-					
-					
+					//var loader = new THREE.DDSLoader();
+					//DDS = loader.load(heightMap);
 
-/*
+
+
 					var qSelect = Math.round(DDS.mipmaps.length * (1 - quality)) - 1;
 					if (qSelect < 0) qSelect = 0;
 
 					
 					var width = DDS.mipmaps[qSelect].width;
 					var height = DDS.mipmaps[qSelect].height;
-					var geometry = new THREE.PlaneBufferGeometry(bySize, bySize, width - 1, height - 1);
-					var vertices = geometry.attributes.position.array;
+
+
+
+					//var geometry = new THREE.PlaneBufferGeometry(bySize, bySize, width - 1, height - 1);
+					//var vertices = geometry.attributes.position.array;
+
+
+					var vertices = new Float32Array( width*height );
 
 					var startPos;
 					if(heightType=='mono:r') startPos = 0;
@@ -729,6 +743,7 @@
 					if(heightType=='mono:a') startPos = 3;
 					var len = DDS.mipmaps[qSelect].data.length;
 					var array = [];
+					console.log(len);
 					for(var i=0; i<(len/4 - 1); i++) {
 						array[i] = DDS.mipmaps[qSelect].data[i*4 + startPos];
 					}
@@ -745,11 +760,10 @@
 							vertices[i] = heightMedian + (heightMax - heightMedian)*(value - med)/(max - med);
 						}						
 					}
-					geometry.computeVertexNormals();
-					var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xC7C7C7 } );
-					terrainMesh = new THREE.Mesh( geometry, groundMaterial );
-					scene.add( terrainMesh );*/
-					var vertices = [];
+					//geometry.computeVertexNormals();
+					//var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xC7C7C7 } );
+					//terrainMesh = new THREE.Mesh( geometry, groundMaterial );
+					//scene.add( terrainMesh );
 					return vertices;
 
 				}
@@ -1103,10 +1117,10 @@
 				createVehicle(new THREE.Vector3(0, 4, -20), ZERO_QUATERNION);
 			}
 			// - Init -
-			initGraphics();
-			initPhysics();
-			createObjects();
-			tick();
+			//initGraphics();
+			//initPhysics();
+			//createObjects();
+			//tick();
 		});
         </script>
     </body>
