@@ -703,8 +703,16 @@
 
 				function TerrainGeometry(heightMap, heightType, bySize, quality, heightMin, heightMax, heightMedian) {
 					var loader = new THREE.DDSLoader();
-					var DDS = loader.load(heightMap);
+					var DDS = loader.load(
+						heightMap,
+						function() {
+							console.log('DDS Loadedd');
+						}
+					);
+					
+					
 
+/*
 					var qSelect = Math.round(DDS.mipmaps.length * (1 - quality)) - 1;
 					if (qSelect < 0) qSelect = 0;
 
@@ -740,7 +748,8 @@
 					geometry.computeVertexNormals();
 					var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xC7C7C7 } );
 					terrainMesh = new THREE.Mesh( geometry, groundMaterial );
-					scene.add( terrainMesh );
+					scene.add( terrainMesh );*/
+					var vertices = [];
 					return vertices;
 
 				}
