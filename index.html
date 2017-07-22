@@ -643,8 +643,8 @@
 			// объявляем глобальные переменные для террейна
 			var terrainWidthExtents = 100;
 			var terrainDepthExtents = 100;
-			var terrainWidth = 128;
-			var terrainDepth = 128;
+			var terrainWidth = 256;
+			var terrainDepth = 256;
 			var terrainHalfWidth = terrainWidth / 2;
 			var terrainHalfDepth = terrainDepth / 2;
 			var terrainMaxHeight = 2;
@@ -657,7 +657,7 @@
 
 			var loader = new THREE.DDSLoader();
 			DDS = loader.load(
-				'map.dds',
+				'mmm.dds',
 				function() {
 					console.log('DDS Loadedd');
 					initGraphics();
@@ -695,7 +695,7 @@
 				
 
 
-				heightData = TerrainGeometry('mipTest0.dds', 'mono:g', 128, 1, -2, 2, 0);
+				heightData = TerrainGeometry('mipTest0.dds', 'mono:g', 256, 1, -2, 2, 0);
 				// объявляем массив высот и рисуем террейн
 				
 				//heightData = generateHeight( terrainWidth, terrainDepth, terrainMinHeight, terrainMaxHeight );
