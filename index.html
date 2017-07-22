@@ -647,7 +647,7 @@
 			var terrainDepth = 512;
 			var terrainHalfWidth = terrainWidth / 2;
 			var terrainHalfDepth = terrainDepth / 2;
-			var terrainMaxHeight = 5;
+			var terrainMaxHeight = 2;
 			var terrainMinHeight = -2;
 			var terrainMesh;
 			var heightData = null;
@@ -695,7 +695,7 @@
 				
 
 
-				heightData = TerrainGeometry('mipTest0.dds', 'mono:r', 512, 1, -2, 5, 1);
+				heightData = TerrainGeometry('mipTest0.dds', 'mono:g', 512, 1, -2, 2, 1);
 				// объявляем массив высот и рисуем террейн
 				
 				//heightData = generateHeight( terrainWidth, terrainDepth, terrainMinHeight, terrainMaxHeight );
