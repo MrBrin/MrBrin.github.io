@@ -546,7 +546,7 @@
 
 
 
-
+<!--
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -1141,6 +1141,251 @@
 			//createObjects();
 			//tick();
 		});
+        </script>
+    </body>
+</html>
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ammo.js Raycast vehicle demo</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {
+                color: #61443e;
+                font-family:Monospace;
+                font-size:13px;
+                text-align:center;
+                background-color: #bfd1e5;
+                margin: 0px;
+                overflow: hidden;
+            }
+			#speedometer {
+				color: #ffffff;
+				background-color: #990000;
+				position: absolute;
+				bottom: 0px;
+				padding: 5px;
+			}
+            #info {
+                position: absolute;
+                top: 0px; width: 100%;
+                padding: 5px;
+            }
+            a {
+                color: #a06851;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"><br /><br /><br /><br /><br />Loading...</div>
+		<div id="speedometer">0.0 km/h</div>
+        <div id="info">Ammo.js Raycast vehicle demo<br>Press W,A,S,D to move.</div>
+
+		<script src="https://rawgit.com/kripken/ammo.js/master/builds/ammo.js"></script>
+		
+
+        <script src="https://rawgit.com/mrdoob/three.js/master/build/three.js"></script>
+	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+        <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/libs/stats.min.js"></script>
+	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/DDSLoader.js"></script>
+	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/libs/dat.gui.min.js"></script>
+
+        <script>
+		// Ammo().then(function(Ammo) {			
+			
+			
+			// Graphics variables
+			var container, stats;
+			var camera, controls, scene, renderer;			
+			var clock = new THREE.Clock();
+			
+			
+			// объявляем глобальные переменные для террейна
+			var DDS_width, DDS_height, terrainMesh, geometryTerrain;
+
+
+			// изменение параметров heightType, quality я не добавил в GUI по причине неведомой херни
+			var params = {
+				heightType: "mono:g",
+				sizeMap: 256,
+				heightMin: -2,
+				heightMax: 2,
+				heightMedian: 0
+			};			
+			
+
+			// загружаем карту высот
+			var DDS;
+			var loader = new THREE.DDSLoader();
+			DDS = loader.load(
+				'mmm.dds',
+				function() {
+					DDS_width = DDS.mipmaps[0].width;
+					DDS_height = DDS.mipmaps[0].height;
+					initScene();
+					tick();
+				}
+			);
+
+
+			function initScene() {
+
+				// инициализируем сцену, камеру, рендерный движок
+				container = document.getElementById( 'container' );
+				scene = new THREE.Scene();
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.2, 2000 );
+				camera.position.x = -4.84;
+				camera.position.y = 4.39;
+				camera.position.z = -35.11;
+				camera.lookAt( new THREE.Vector3( 0.33, -0.40, 0.85 ) );
+				controls = new THREE.OrbitControls( camera );
+				renderer = new THREE.WebGLRenderer({antialias:true});
+				renderer.setClearColor( 0xbfd1e5 );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				// добавляем источники освещения
+				var ambientLight = new THREE.AmbientLight( 0x404040 );
+				scene.add( ambientLight );
+				var dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+				dirLight.position.set( 10, 10, 5 );
+				scene.add( dirLight );
+
+				// добавляем отображаемый Terrain				
+				heightData = TerrainData(params);
+				geometryTerrain = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, DDS_width - 1, DDS_height - 1);
+				geometryTerrain.rotateX( - Math.PI / 2 );
+				var vertices = geometryTerrain.attributes.position.array;
+				for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
+					vertices[ j + 1 ] = heightData[ i ];
+				}
+				geometryTerrain.computeVertexNormals();
+				var groundMaterial = new THREE.MeshPhongMaterial( { color: 0xC7C7C7 } );
+				terrainMesh = new THREE.Mesh( geometryTerrain, groundMaterial );
+				scene.add( terrainMesh );
+
+				// добавляем рендерный движок и статистику в документ
+				container.innerHTML = "";
+				container.appendChild( renderer.domElement );
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );
+				window.addEventListener( 'resize', onWindowResize, false );
+				
+
+
+				var gui = new dat.GUI( { width: 400 } );
+				gui.add( params, 'heightType', [ 'mono:a', 'mono:g', 'mono:b', 'mono:r' ] );
+				gui.add( params, 'sizeMap', 1, 1024 );							
+				gui.add( params, 'heightMin', -50, 50 );
+				gui.add( params, 'heightMax', -50, 50 );
+				gui.add( params, 'heightMedian', -50, 50 );
+				gui.open();				
+
+			}
+
+
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function onKey() {
+				
+				reOptionTerrain(); // перерасчёт террейна при всевозможном изменении параметров его отображения
+			}			
+
+
+			function tick() {
+				window.addEventListener( 'keypress', onKey, false );
+				requestAnimationFrame( tick );
+				var dt = clock.getDelta();
+				
+				controls.update( dt );
+				renderer.render( scene, camera );
+				
+				
+				stats.update();
+			}
+
+
+			function TerrainData (params) {
+				
+				var heightType = params.heightType;				
+				var heightMin = params.heightMin;
+				var heightMax = params.heightMax;
+				var heightMedian = params.heightMedian;				
+				
+				// рассчет высот по каналу считывания
+				var startPos;
+				if(heightType == 'mono:r') startPos = 0;
+				if(heightType == 'mono:g') startPos = 1;
+				if(heightType == 'mono:b') startPos = 2;
+				if(heightType == 'mono:a') startPos = 3;
+				
+				// считывание цветов с выбранного mipmap-a
+				var array = new Float32Array(DDS_width * DDS_height);
+				var len = DDS.mipmaps[0].data.length;
+				for(var i = 0; i < (len/4 - 1); i++) {
+					array[i] = DDS.mipmaps[0].data[i*4 + startPos];
+				}
+
+				// перерасчёт высот на основе цветов
+				var min = minArr(array);
+				var max = maxArr(array);
+				var med = (max + min)/2;
+				for (var i = 0; i < (len/4 - 1); i++) {
+					var value = array[i];
+					if (value < med) {
+						array[i] = heightMin + (heightMedian - heightMin)*(value - min)/(med - min);
+					} else {
+						array[i] = heightMedian + (heightMax - heightMedian)*(value - med)/(max - med);
+					}						
+				}
+
+				return array; // возвращаем массив высот карты
+					
+				// функция минимального числа в массиве
+				function minArr(array) {
+					var min = array[0];
+					for (var i = 1; i < array.length; i++) {
+						if (array[i] <= min) min = array[i];
+					}
+					return min;
+				}
+
+				// функция максимального числа в массиве
+				function maxArr(array) {
+					var max = array[0];
+					for (var i = 1; i < array.length; i++) {
+						if (array[i] >= max) max = array[i];
+					}
+					return max;
+				}					
+					
+			}
+
+
+			function reOptionTerrain() {
+
+				heightData = TerrainData(params);				
+				var geometry = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, DDS_width - 1, DDS_height - 1);
+				geometry.rotateX( - Math.PI / 2 );
+				var vertices = geometry.attributes.position.array;
+				for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
+					vertices[ j + 1 ] = heightData[ i ];
+				}
+				geometry.computeVertexNormals();
+				terrainMesh.geometry.dispose();				
+				terrainMesh.geometry = geometry;
+
+			}
+
+		// });
         </script>
     </body>
 </html>
