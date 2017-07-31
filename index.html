@@ -1448,7 +1448,7 @@
 			var mouseX = 0, mouseY = 0;
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
-			var obb;
+			var obb, ambient, directionalLight;
 			init();
 			animate();
 			function init() {
@@ -1461,10 +1461,10 @@
 				controls.maxDistance = 100;
 				// scene
 				scene = new THREE.Scene();
-				var ambient = new THREE.AmbientLight( 0x444444 );
+				ambient = new THREE.AmbientLight( 0x444444 );
 				scene.add( ambient );
-				var directionalLight = new THREE.DirectionalLight( 0xffeedd );
-				directionalLight.position.set( 0, 0, 1 ).normalize();
+				directionalLight = new THREE.DirectionalLight( 0xffeedd );
+				directionalLight.position.set( 0, 10, 1 ).normalize();
 				scene.add( directionalLight );
 				// model
 				var onProgress = function ( xhr ) {
