@@ -1436,6 +1436,7 @@
 		<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/MTLLoader.js"></script>
 		<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/OBJLoader.js"></script>
 		<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/libs/stats.min.js"></script>
+		<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
 		
 		
 		
@@ -1453,7 +1454,10 @@
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-				camera.position.z = 250;
+				camera.position.z = 5;
+				controls = new THREE.OrbitControls( camera );
+				controls.minDistance = 0;
+				controls.maxDistance = 100;
 				// scene
 				scene = new THREE.Scene();
 				var ambient = new THREE.AmbientLight( 0x444444 );
@@ -1507,10 +1511,9 @@
 				requestAnimationFrame( animate );
 				render();
 			}
-			function render() {
-				camera.position.x += ( mouseX - camera.position.x ) * .05;
-				camera.position.y += ( - mouseY - camera.position.y ) * .05;
+			function render() {				
 				camera.lookAt( scene.position );
+				controls.update();
 				renderer.render( scene, camera );
 			}
 		</script>
