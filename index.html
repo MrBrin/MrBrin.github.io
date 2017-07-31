@@ -1448,6 +1448,7 @@
 			var mouseX = 0, mouseY = 0;
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
+			var obb;
 			init();
 			animate();
 			function init() {
@@ -1482,8 +1483,9 @@
 					objLoader.setMaterials( materials );
 					//objLoader.setPath( 'obj/male02/' );
 					objLoader.load( 'yyy.obj', function ( object ) {
-						object.position.y = - 95;
-						scene.add( object );
+						//object.position.y = - 95;
+						obb = object;
+						scene.add( obb );
 					}, onProgress, onError );
 				});
 				//
