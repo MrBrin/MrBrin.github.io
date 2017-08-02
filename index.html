@@ -1398,7 +1398,7 @@
 
 
 
-
+<!--
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -1521,4 +1521,245 @@
 		</script>
 
 	</body>
+</html>
+-->
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Ammo.js Raycast vehicle demo</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {
+                color: #61443e;
+                font-family:Monospace;
+                font-size:13px;
+                text-align:center;
+                background-color: #bfd1e5;
+                margin: 0px;
+                overflow: hidden;
+            }
+			#speedometer {
+				color: #ffffff;
+				background-color: #990000;
+				position: absolute;
+				bottom: 0px;
+				padding: 5px;
+			}
+            #info {
+                position: absolute;
+                top: 0px; width: 100%;
+                padding: 5px;
+            }
+            a {
+                color: #a06851;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"><br /><br /><br /><br /><br />Loading...</div>
+		<div id="speedometer">0.0 km/h</div>
+        <div id="info">Ammo.js Raycast vehicle demo<br>Press W,A,S,D to move.</div>
+
+		
+		
+
+        <script src="https://rawgit.com/mrdoob/three.js/master/build/three.js"></script>
+	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+        <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/libs/stats.min.js"></script>
+	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/DDSLoader.js"></script>
+	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/libs/dat.gui.min.js"></script>
+	<script src="https://cdn.rawgit.com/zz85/zz85-bookmarklets/master/js/ThreeInspector.js"></script>
+        <script>
+		// Ammo().then(function(Ammo) {			
+			
+			
+			// Graphics variables
+			var container, stats;
+			var camera, controls, scene, renderer;			
+			var clock = new THREE.Clock();
+			
+			
+			// объявляем глобальные переменные для террейна
+			var DDS_width, DDS_height, terrainMesh, geometryTerrain;
+
+
+
+			var textureLoader = new THREE.TextureLoader();
+			var heightMAP = textureLoader.load( "mapH.png" );
+			var mapT = textureLoader.load( "mapT.jpg" );
+			var mapTnormal = textureLoader.load( "mapTnormal.jpg" );
+			mapT.wrapS = mapT.wrapT = THREE.RepeatWrapping;
+			mapTnormal.wrapS = mapTnormal.wrapT = THREE.RepeatWrapping;
+			mapT.repeat.set( 4, 4 );
+			mapTnormal.repeat.set( 4, 4 );
+
+
+
+			// изменение параметров heightType, quality я не добавил в GUI по причине неведомой херни
+			var params = {				
+				sizeMap: 512,
+				minH: -10,
+				maxH: 10
+			};			
+			
+
+
+			/*
+			// загружаем карту высот
+			var DDS;
+			var loader = new THREE.DDSLoader();
+			DDS = loader.load(
+				'test.dds',
+				function() {
+					DDS_width = DDS.mipmaps[0].width;
+					DDS_height = DDS.mipmaps[0].height;
+					initScene();
+					tick();
+				}
+			);
+			*/
+
+
+			function initScene() {
+
+				// инициализируем сцену, камеру, рендерный движок
+				container = document.getElementById( 'container' );
+				scene = new THREE.Scene();
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.2, 2000 );
+				camera.position.x = -4.84;
+				camera.position.y = 4.39;
+				camera.position.z = -35.11;
+				camera.lookAt( new THREE.Vector3( 0.33, -0.40, 0.85 ) );
+				controls = new THREE.OrbitControls( camera );
+				renderer = new THREE.WebGLRenderer({antialias:true});
+				renderer.setClearColor( 0xbfd1e5 );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				// добавляем источники освещения
+				var ambientLight = new THREE.AmbientLight( 0x404040 );
+				scene.add( ambientLight );
+				var dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+				dirLight.position.set( 10, 10, 5 );
+				scene.add( dirLight );
+
+				// добавляем отображаемый Terrain				
+				heightData = getHeightData(heightMAP, params);
+				geometryTerrain = new THREE.PlaneBufferGeometry(params.sizeMap, heightMAP.width - 1, heightMAP.height - 1);
+				geometryTerrain.rotateX( - Math.PI / 2 );
+				var vertices = geometryTerrain.attributes.position.array;
+				for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
+					vertices[ j + 1 ] = heightData[ i ];
+				}
+				geometryTerrain.computeVertexNormals();				
+				var material = new THREE.MeshPhongMaterial( {
+					color: 0x725C47,
+					specular: 0xB79373,
+					shininess: 35,
+					map: mapT,	
+					normalMap: mapTnormal,
+					normalScale: new THREE.Vector2( 0.8, 0.8 )
+				} );
+				terrainMesh = new THREE.Mesh( geometryTerrain, material );
+				scene.add( terrainMesh );
+
+				// добавляем рендерный движок и статистику в документ
+				container.innerHTML = "";
+				container.appendChild( renderer.domElement );
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );
+				window.addEventListener( 'resize', onWindowResize, false );
+				
+
+
+				var gui = new dat.GUI( { width: 400 } );				
+				gui.add( params, 'sizeMap', 1, 1024 );							
+				gui.add( params, 'heightMin', -50, 50 );
+				gui.add( params, 'heightMax', -50, 50 );				
+				gui.open();				
+
+			}
+
+
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function onKey() {
+				
+				reOptionTerrain(); // перерасчёт террейна при всевозможном изменении параметров его отображения
+
+			}			
+
+
+			function tick() {
+				window.addEventListener( 'keypress', onKey, false );
+				requestAnimationFrame( tick );
+				var dt = clock.getDelta();
+				
+				controls.update( dt );
+				renderer.render( scene, camera );
+				
+				
+				stats.update();
+			}
+
+
+			function getHeightData(img, params) {
+				var minH = params.minH, maxH = params.maxH;
+
+				var canvas = document.createElement( 'canvas' );
+				canvas.width = img.width;
+				canvas.height = img.height;
+				var size = canvas.width * canvas.height, data = new Float32Array( size );
+
+				var context = canvas.getContext( '2d' );
+				context.drawImage(img, 0, 0);
+				var imgd = context.getImageData(0, 0, 128, 128);
+				var pix = imgd.data;
+
+				var height = maxH - minH, j = 0;
+				for (var i = 0, n = pix.length; i < n; i += 4) {
+					var all = (pix[i] + pix[i+1] + pix[i+2]) / 3;
+					data[j++] = minH + (height * all/255);
+				}
+
+				return data;
+			}
+
+
+			function reOptionTerrain() {
+
+				heightData = getHeightData(heightMAP, params);				
+				var geometry = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, heightMAP.width - 1, heightMAP.height - 1);
+				geometry.rotateX( - Math.PI / 2 );
+				var vertices = geometry.attributes.position.array;
+				for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
+					vertices[ j + 1 ] = heightData[ i ];
+				}
+				geometry.computeVertexNormals();
+				terrainMesh.geometry.dispose();				
+				terrainMesh.geometry = geometry;
+
+			}
+
+		// });
+        </script>
+    </body>
 </html>
