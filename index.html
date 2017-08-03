@@ -1668,7 +1668,7 @@
 
 				// добавляем отображаемый Terrain				
 				heightData = getHeightData(heightMAP, params);
-				geometryTerrain = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, heightMAP.width - 1, heightMAP.height - 1);
+				geometryTerrain = new THREE.PlaneBufferGeometry(512, 512, 511, 511);
 				geometryTerrain.rotateX( - Math.PI / 2 );
 				
 				
@@ -1768,7 +1768,7 @@
 			function reOptionTerrain() {
 
 				heightData = getHeightData(heightMAP, params);				
-				var geometry = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, heightMAP.width - 1, heightMAP.height - 1);
+				var geometry = new THREE.PlaneBufferGeometry(512, 512, 511, 511);
 				geometry.rotateX( - Math.PI / 2 );
 				
 				
