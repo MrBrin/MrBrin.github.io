@@ -1597,7 +1597,7 @@
 
 
 			var textureLoader = new THREE.TextureLoader();
-			var heightMAP = textureLoader.load( "mapH.png" );
+			
 			var mapT = textureLoader.load( "mapT.jpg" );
 			var mapTnormal = textureLoader.load( "mapTnormal.jpg" );
 			mapT.wrapS = mapT.wrapT = THREE.RepeatWrapping;
@@ -1612,9 +1612,19 @@
 				sizeMap: 512,
 				minH: -10,
 				maxH: 10
-			};			
-			initScene();
-			tick();
+			};
+		
+		
+		
+			var heightMAP = new Image();
+			heightMAP.onload = function () {
+				initScene();
+				tick();	
+			};
+			heightMAP.src = "mapH.png";
+		
+		
+			
 
 
 			/*
