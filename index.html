@@ -1577,6 +1577,7 @@
 
         <script src="https://rawgit.com/mrdoob/three.js/master/build/three.js"></script>
 	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/WaterShader.js"></script>
         <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/libs/stats.min.js"></script>
 	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/DDSLoader.js"></script>
 	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/libs/dat.gui.min.js"></script>
@@ -1601,13 +1602,24 @@
 			mapTnormal.wrapS = mapTnormal.wrapT = THREE.RepeatWrapping;
 			mapT.repeat.set( 96, 96 );
 			mapTnormal.repeat.set( 96, 96 );
+		
+			var waterNormals, water;
 
 			// изменение параметров heightType, quality я не добавил в GUI по причине неведомой херни
 			var params = {				
 				sizeMap: 512,
 				minH: -10,
 				maxH: 10
-			};		
+			};
+			var parameters = {
+				width: 2000,
+				height: 2000,
+				widthSegments: 250,
+				heightSegments: 250,
+				depth: 1500,
+				param: 4,
+				filterparam: 1
+			};
 		
 			var heightMAP = new Image();
 			heightMAP.onload = function () {
@@ -1655,6 +1667,28 @@
 				} );
 				terrainMesh = new THREE.Mesh( geometryTerrain, material );
 				scene.add( terrainMesh );
+				
+				// добавляем водяную плоскость
+				waterNormals = new THREE.TextureLoader().load( 'waternormals.jpg' );
+				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+				water = new THREE.Water( renderer, camera, scene, {
+					textureWidth: 512,
+					textureHeight: 512,
+					waterNormals: waterNormals,
+					alpha: 	1.0,
+					sunDirection: light.position.clone().normalize(),
+					sunColor: 0xffffff,
+					waterColor: 0x001e0f,
+					distortionScale: 50.0,
+					fog: scene.fog != undefined
+				} );
+				var mirrorMesh = new THREE.Mesh(
+					new THREE.PlaneBufferGeometry( parameters.width * 500, parameters.height * 500 ),
+					water.material
+				);
+				mirrorMesh.add( water );
+				mirrorMesh.rotation.x = - Math.PI * 0.5;
+				scene.add( mirrorMesh );
 
 				// добавляем рендерный движок и статистику в документ
 				container.innerHTML = "";
@@ -1692,7 +1726,9 @@
 				requestAnimationFrame( tick );
 				var dt = clock.getDelta();
 				
+				water.material.uniforms.time.value += 1.0 / 60.0;				
 				controls.update( dt );
+				water.render();
 				renderer.render( scene, camera );				
 				
 				stats.update();
