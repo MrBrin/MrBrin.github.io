@@ -1592,29 +1592,22 @@
 			
 			
 			// объявляем глобальные переменные для террейна
-			var DDS_width, DDS_height, terrainMesh, geometryTerrain;
+			var terrainMesh, geometryTerrain;
 
-
-
-			var textureLoader = new THREE.TextureLoader();
-			
+			var textureLoader = new THREE.TextureLoader();			
 			var mapT = textureLoader.load( "mapT.jpg" );
 			var mapTnormal = textureLoader.load( "mapTnormal.jpg" );
-			//mapT.wrapS = mapT.wrapT = THREE.RepeatWrapping;
-			//mapTnormal.wrapS = mapTnormal.wrapT = THREE.RepeatWrapping;
-			//mapT.repeat.set( 4, 4 );
-			//mapTnormal.repeat.set( 4, 4 );
-
-
+			mapT.wrapS = mapT.wrapT = THREE.RepeatWrapping;
+			mapTnormal.wrapS = mapTnormal.wrapT = THREE.RepeatWrapping;
+			mapT.repeat.set( 4, 4 );
+			mapTnormal.repeat.set( 4, 4 );
 
 			// изменение параметров heightType, quality я не добавил в GUI по причине неведомой херни
 			var params = {				
 				sizeMap: 512,
 				minH: -10,
 				maxH: 10
-			};
-		
-		
+			};		
 		
 			var heightMAP = new Image();
 			heightMAP.onload = function () {
@@ -1624,24 +1617,7 @@
 			heightMAP.src = "mapH.png";
 		
 		
-			
-
-
-			/*
-			// загружаем карту высот
-			var DDS;
-			var loader = new THREE.DDSLoader();
-			DDS = loader.load(
-				'test.dds',
-				function() {
-					DDS_width = DDS.mipmaps[0].width;
-					DDS_height = DDS.mipmaps[0].height;
-					initScene();
-					tick();
-				}
-			);
-			*/
-
+		
 
 			function initScene() {
 
@@ -1668,23 +1644,7 @@
 
 				// добавляем отображаемый Terrain				
 				heightData = getHeightData(heightMAP, params);
-				geometryTerrain = new THREE.PlaneBufferGeometry(512, 512, 512, 512);
-				geometryTerrain.rotateX( - Math.PI / 2 );
-				
-				
-				var vertices = geometryTerrain.attributes.position.array;
-				for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
-					vertices[ j + 1 ] = heightData[ i ];
-				}
-				geometryTerrain.computeVertexNormals();	
-				/*
-				for ( var i = 0, l = geometryTerrain.attributes.position.count; i < l; i++ ) {
-					var g = i*3-1;
-					if (g<0) g=0;
-					geometryTerrain.attributes.position.array[g] = heightData[i];
-				}*/
-				
-				
+				geometryTerrain = createTerrainMesh(heightMAP, heightData, params);				
 				var material = new THREE.MeshPhongMaterial( {
 					color: 0x725C47,
 					specular: 0xB79373,
@@ -1703,10 +1663,9 @@
 				stats.domElement.style.position = 'absolute';
 				stats.domElement.style.top = '0px';
 				container.appendChild( stats.domElement );
-				window.addEventListener( 'resize', onWindowResize, false );
-				
+				window.addEventListener( 'resize', onWindowResize, false );				
 
-
+				// добавляем интерфейс управления террейном
 				var gui = new dat.GUI( { width: 400 } );				
 				gui.add( params, 'sizeMap', 1, 1024 );							
 				gui.add( params, 'minH', -50, 50 );
@@ -1722,102 +1681,63 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 			}
 
-			function onKey() {
-				
-				reOptionTerrain(); // перерасчёт террейна при всевозможном изменении параметров его отображения
-
-			}			
+		
+			// перерасчёт террейна при всевозможном изменении параметров его отображения
+			function onKey() {reOptionTerrain();}			
 
 
+			// рендер сцены
 			function tick() {
 				window.addEventListener( 'keypress', onKey, false );
 				requestAnimationFrame( tick );
 				var dt = clock.getDelta();
 				
 				controls.update( dt );
-				renderer.render( scene, camera );
-				
+				renderer.render( scene, camera );				
 				
 				stats.update();
 			}
 
-
+		
+			// считывание высот с изображения "карта высот" для террайна
 			function getHeightData(img, params) {
-				/*var minH = params.minH, maxH = params.maxH;
-
+				var minH = params.minH, maxH = params.maxH;
 				var canvas = document.createElement( 'canvas' );
 				canvas.width = img.width;
 				canvas.height = img.height;
 				var size = canvas.width * canvas.height, data = new Float32Array( size );
-				
-				for ( var i = 0; i < size; i ++ ) {
-					data[i] = 0
-				}
-
 				var context = canvas.getContext( '2d' );
 				context.drawImage(img, 0, 0);
-				var imgd = context.getImageData(0, 0, 128, 128);
+				var imgd = context.getImageData(0, 0, img.width, img.height);
 				var pix = imgd.data;
-
 				var height = maxH - minH, j = 0;
 				for (var i = 0, n = pix.length; i < n; i += 4) {
 					var all = (pix[i] + pix[i+1] + pix[i+2]) / 3;
 					data[j++] = minH + (height * all/255);
 				}
-
-				return data;*/
-				var canvas = document.createElement( 'canvas' );
-				canvas.width = 512;
-				canvas.height = 512;
-				var context = canvas.getContext( '2d' );
-
-				var size = 512 * 512, data = new Float32Array( size );
-
-				context.drawImage(img,0,0);
-
-				for ( var i = 0; i < size; i ++ ) {
-					data[i] = 0
-				}
-
-				var imgd = context.getImageData(0, 0, 512, 512);
-				var pix = imgd.data;
-
-				var j=0;
-				for (var i = 0, n = pix.length; i < n; i += (4)) {
-					var all = pix[i]+pix[i+1]+pix[i+2];
-					data[j++] = all/30;
-				}
-
-				return data;
+				return data;				
 			}
-
-
-			function reOptionTerrain() {
-
-				heightData = getHeightData(heightMAP, params);				
-				var geometry = new THREE.PlaneBufferGeometry(512, 512, 512, 512);
-				geometry.rotateX( - Math.PI / 2 );
-				
-				
+		
+		
+			// создание геометрии террейна по массиву высот
+			function createTerrainMesh(img, heightData, params) {
+				var geometry = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, img.width - 1, img.height - 1);
+				geometry.rotateX( - Math.PI / 2 );				
 				var vertices = geometry.attributes.position.array;
 				for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
 					vertices[ j + 1 ] = heightData[ i ];
 				}
 				geometry.computeVertexNormals();
-				
-				
-				
-				/*
-				for ( var i = 0, l = geometry.attributes.position.count; i < l; i++ ) {
-					var g = i*3-1;
-					if (g<0) g=0;
-					geometry.attributes.position.array[g] = heightData[i];
-				}*/
-				
-				
+				return geometry;			
+			}
+
+		
+			// обновление геометрии террейна (для активного изменения ландшафта через интерфейс)
+			function reOptionTerrain() {
+				heightData = getHeightData(heightMAP, params);				
+				var geometry = createTerrainMesh(heightMAP, heightData, params);				
 				terrainMesh.geometry.dispose();				
 				terrainMesh.geometry = geometry;
-
 			}
 
 		// });
