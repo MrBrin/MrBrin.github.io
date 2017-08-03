@@ -1671,18 +1671,18 @@
 				geometryTerrain = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, heightMAP.width - 1, heightMAP.height - 1);
 				geometryTerrain.rotateX( - Math.PI / 2 );
 				
-				/*
+				
 				var vertices = geometryTerrain.attributes.position.array;
 				for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
 					vertices[ j + 1 ] = heightData[ i ];
 				}
 				geometryTerrain.computeVertexNormals();	
-				*/
+				/*
 				for ( var i = 0, l = geometryTerrain.attributes.position.count; i < l; i++ ) {
 					var g = i*3-1;
 					if (g<0) g=0;
 					geometryTerrain.attributes.position.array[g] = heightData[i];
-				}
+				}*/
 				
 				
 				var material = new THREE.MeshPhongMaterial( {
@@ -1771,21 +1771,21 @@
 				var geometry = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, heightMAP.width - 1, heightMAP.height - 1);
 				geometry.rotateX( - Math.PI / 2 );
 				
-				/*
+				
 				var vertices = geometry.attributes.position.array;
 				for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
 					vertices[ j + 1 ] = heightData[ i ];
 				}
 				geometry.computeVertexNormals();
-				*/
 				
 				
 				
+				/*
 				for ( var i = 0, l = geometry.attributes.position.count; i < l; i++ ) {
 					var g = i*3-1;
 					if (g<0) g=0;
 					geometry.attributes.position.array[g] = heightData[i];
-				}
+				}*/
 				
 				
 				terrainMesh.geometry.dispose();				
