@@ -1749,6 +1749,10 @@
 				canvas.width = img.width;
 				canvas.height = img.height;
 				var size = canvas.width * canvas.height, data = new Float32Array( size );
+				
+				for ( var i = 0; i < size; i ++ ) {
+					data[i] = 0
+				}
 
 				var context = canvas.getContext( '2d' );
 				context.drawImage(img, 0, 0);
