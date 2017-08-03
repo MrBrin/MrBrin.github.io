@@ -1668,7 +1668,7 @@
 
 				// добавляем отображаемый Terrain				
 				heightData = getHeightData(heightMAP, params);
-				geometryTerrain = new THREE.PlaneBufferGeometry(params.sizeMap, heightMAP.width - 1, heightMAP.height - 1);
+				geometryTerrain = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, heightMAP.width - 1, heightMAP.height - 1);
 				geometryTerrain.rotateX( - Math.PI / 2 );
 				
 				/*
