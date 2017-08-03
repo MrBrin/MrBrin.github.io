@@ -1678,8 +1678,10 @@
 				}
 				geometryTerrain.computeVertexNormals();	
 				*/
-				for ( var i = 0, l = geometryTerrain.vertices.length; i < l; i++ ) {
-					geometryTerrain.vertices[i].position.z = heightData[i];
+				for ( var i = 0, l = geometryTerrain.attributes.position.count; i < l; i++ ) {
+					var g = i*3-1;
+					if (g<0) g=0;
+					geometryTerrain.attributes.position.array[g] = heightData[i];
 				}
 				
 				
@@ -1779,8 +1781,10 @@
 				
 				
 				
-				for ( var i = 0, l = geometry.vertices.length; i < l; i++ ) {
-					geometry.vertices[i].position.z = heightData[i];
+				for ( var i = 0, l = geometry.attributes.position.count; i < l; i++ ) {
+					var g = i*3-1;
+					if (g<0) g=0;
+					geometry.attributes.position.array[g] = heightData[i];
 				}
 				
 				
