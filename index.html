@@ -1668,7 +1668,7 @@
 
 				// добавляем отображаемый Terrain				
 				heightData = getHeightData(heightMAP, params);
-				geometryTerrain = new THREE.PlaneBufferGeometry(128, 128, 127, 127);
+				geometryTerrain = new THREE.PlaneBufferGeometry(512, 512, 511, 511);
 				geometryTerrain.rotateX( - Math.PI / 2 );
 				
 				
@@ -1767,11 +1767,11 @@
 
 				return data;*/
 				var canvas = document.createElement( 'canvas' );
-				canvas.width = 128;
-				canvas.height = 128;
+				canvas.width = 512;
+				canvas.height = 512;
 				var context = canvas.getContext( '2d' );
 
-				var size = 128 * 128, data = new Float32Array( size );
+				var size = 512 * 512, data = new Float32Array( size );
 
 				context.drawImage(img,0,0);
 
@@ -1779,7 +1779,7 @@
 					data[i] = 0
 				}
 
-				var imgd = context.getImageData(0, 0, 128, 128);
+				var imgd = context.getImageData(0, 0, 512, 512);
 				var pix = imgd.data;
 
 				var j=0;
@@ -1795,7 +1795,7 @@
 			function reOptionTerrain() {
 
 				heightData = getHeightData(heightMAP, params);				
-				var geometry = new THREE.PlaneBufferGeometry(128, 128, 127, 127);
+				var geometry = new THREE.PlaneBufferGeometry(512, 512, 511, 511);
 				geometry.rotateX( - Math.PI / 2 );
 				
 				
