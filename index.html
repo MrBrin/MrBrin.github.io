@@ -1686,7 +1686,8 @@
 				camera.position.z = -35.11;
 				camera.lookAt( new THREE.Vector3( 0.33, -0.40, 0.85 ) );
 				controls = new THREE.OrbitControls( camera );
-				renderer = new THREE.WebGLRenderer({antialias:true});
+				
+				renderer = new THREE.WebGLRenderer(); //{antialias:true}
 				//renderer.setClearColor( 0xbfd1e5 );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
