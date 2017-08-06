@@ -1605,6 +1605,7 @@
 			mapTnormal.repeat.set( 96, 96 );
 		
 			var waterNormals, water;
+			var geometryWater, mirrorMesh;
 			var sunSphere, sky;
 
 			// изменение параметров heightType, quality я не добавил в GUI по причине неведомой херни
@@ -1727,10 +1728,12 @@
 					distortionScale: 50.0,
 					fog: scene.fog != undefined
 				} );
-				var mirrorMesh = new THREE.Mesh(
-					new THREE.PlaneBufferGeometry( parameters.width * 500, parameters.height * 500 ),
-					water.material
-				);
+				geometryWater = new THREE.PlaneBufferGeometry( parameters.width * 500, parameters.height * 500 );
+				geometryWater.rotateX( - Math.PI / 2 );
+				for ( var i = 0, l = geometryWater.vertices.length; i < l; i ++ ) {
+					geometryWater.vertices[ i ].y = 5 * Math.sin( i / 2 );
+				}
+				mirrorMesh = new THREE.Mesh(geometryWater, water.material);
 				mirrorMesh.add( water );
 				mirrorMesh.rotation.x = - Math.PI * 0.5;
 				scene.add( mirrorMesh );
@@ -1774,6 +1777,11 @@
 				window.addEventListener( 'keypress', onKey, false );
 				requestAnimationFrame( tick );
 				var dt = clock.getDelta();
+				
+				for ( var i = 0, l = geometryWater.vertices.length; i < l; i ++ ) {
+					geometryWater.vertices[ i ].y = 5 * Math.sin( i / 5 + ( time + i ) / 7 );
+				}
+				mirrorMesh.geometry.verticesNeedUpdate = true;
 				
 				water.material.uniforms.time.value += 1.0 / 60.0;				
 				controls.update( dt );
