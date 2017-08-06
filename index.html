@@ -1730,7 +1730,7 @@
 				} );
 				// geometryWater = new THREE.PlaneBufferGeometry( parameters.width * 500, parameters.height * 500 );
 				geometryWater = new THREE.PlaneGeometry( parameters.width * 500, parameters.height * 500 , 255, 255 );
-				//geometryWater.rotateX( - Math.PI / 2 );
+				geometryWater.rotateX( - Math.PI / 2 );
 				for ( var i = 0, l = geometryWater.vertices.length; i < l; i ++ ) {
 					geometryWater.vertices[ i ].y = 5 * Math.sin( i / 2 );
 				}
