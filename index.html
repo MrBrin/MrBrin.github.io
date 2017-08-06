@@ -1815,47 +1815,8 @@
 			heightMAP.src = "mapH.png";
 		
 			
-			function initSky() {
-				// Add Sky Mesh
-				sky = new THREE.Sky();
-				scene.add( sky.mesh );
-				// Add Sun Helper
-				sunSphere = new THREE.Mesh(
-					new THREE.SphereBufferGeometry( 20000, 16, 8 ),
-					new THREE.MeshBasicMaterial( { color: 0xffffff } )
-				);
-				sunSphere.position.y = - 700000;
-				sunSphere.visible = false;
-				scene.add( sunSphere );
-				/// GUI
-				var effectController  = {
-					turbidity: 10,
-					rayleigh: 2,
-					mieCoefficient: 0.005,
-					mieDirectionalG: 0.8,
-					luminance: 1,
-					inclination: 0.49, // elevation / inclination
-					azimuth: 0.25, // Facing front,
-					sun: ! true
-				};
-				var distance = 400000;
-				function guiChanged() {
-					var uniforms = sky.uniforms;
-					uniforms.turbidity.value = effectController.turbidity;
-					uniforms.rayleigh.value = effectController.rayleigh;
-					uniforms.luminance.value = effectController.luminance;
-					uniforms.mieCoefficient.value = effectController.mieCoefficient;
-					uniforms.mieDirectionalG.value = effectController.mieDirectionalG;
-					var theta = Math.PI * ( effectController.inclination - 0.5 );
-					var phi = 2 * Math.PI * ( effectController.azimuth - 0.5 );
-					sunSphere.position.x = distance * Math.cos( phi );
-					sunSphere.position.y = distance * Math.sin( phi ) * Math.sin( theta );
-					sunSphere.position.z = distance * Math.sin( phi ) * Math.cos( theta );
-					sunSphere.visible = effectController.sun;
-					sky.uniforms.sunPosition.value.copy( sunSphere.position );
-					renderer.render( scene, camera );
-				}				
-				guiChanged();
+			function initSky() {				
+				
 			}
 		
 
@@ -1869,13 +1830,12 @@
 				camera.position.y = 4.39;
 				camera.position.z = -35.11;
 				camera.lookAt( new THREE.Vector3( 0.33, -0.40, 0.85 ) );
-				controls = new THREE.OrbitControls( camera );
-				
-				renderer = new THREE.WebGLRenderer(); //{antialias:true}
-				//renderer.setClearColor( 0xbfd1e5 );
+				controls = new THREE.OrbitControls(camera);				
+				renderer = new THREE.WebGLRenderer(); //{antialias:true}				
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
+				
 				// добавляем источники освещения
 				var ambientLight = new THREE.AmbientLight( 0x404040 );
 				scene.add( ambientLight );
@@ -1943,7 +1903,47 @@
 				scene.add(mirrorMesh);
 				
 				
-
+				// добавляем небо
+				var inf = parametersOBJ.Sky;
+				sky = new THREE.Sky();
+				scene.add( sky.mesh );				
+				sunSphere = new THREE.Mesh(
+					new THREE.SphereBufferGeometry( 20000, 16, 8 ),
+					new THREE.MeshBasicMaterial( { color: 0xffffff } )
+				);
+				sunSphere.position.y = - 700000;
+				sunSphere.visible = false;
+				scene.add(sunSphere);				
+				var effectController  = {
+					turbidity:	inf.turbidity,
+					rayleigh:	inf.rayleigh,
+					mieCoefficient:	inf.mieCoefficient,
+					mieDirectionalG:inf.mieDirectionalG,
+					luminance:	inf.luminance,
+					inclination:	inf.inclination, // elevation / inclination
+					azimuth:	inf.azimuth, // Facing front,
+					sun:		inf.sun
+				};
+				var distance = inf.distance;
+				function settings_Sky() {
+					var uniforms = sky.uniforms;
+					uniforms.turbidity.value = effectController.turbidity;
+					uniforms.rayleigh.value = effectController.rayleigh;
+					uniforms.luminance.value = effectController.luminance;
+					uniforms.mieCoefficient.value = effectController.mieCoefficient;
+					uniforms.mieDirectionalG.value = effectController.mieDirectionalG;
+					var theta = Math.PI * ( effectController.inclination - 0.5 );
+					var phi = 2 * Math.PI * ( effectController.azimuth - 0.5 );
+					sunSphere.position.x = distance * Math.cos( phi );
+					sunSphere.position.y = distance * Math.sin( phi ) * Math.sin( theta );
+					sunSphere.position.z = distance * Math.sin( phi ) * Math.cos( theta );
+					sunSphere.visible = effectController.sun;
+					sky.uniforms.sunPosition.value.copy( sunSphere.position );
+					renderer.render( scene, camera );
+				}				
+				settings_Sky();
+				
+				
 				// добавляем рендерный движок и статистику в документ
 				container.innerHTML = "";
 				container.appendChild( renderer.domElement );
@@ -1951,9 +1951,8 @@
 				stats.domElement.style.position = 'absolute';
 				stats.domElement.style.top = '0px';
 				container.appendChild( stats.domElement );
-				window.addEventListener( 'resize', onWindowResize, false );
+				window.addEventListener( 'resize', onWindowResize, false );				
 				
-				initSky();
 
 				// добавляем интерфейс управления террейном
 				var gui = new dat.GUI( { width: 400 } );				
