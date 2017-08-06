@@ -1729,13 +1729,7 @@
 			// объявляем глобальные переменные для террейна
 			var terrainMesh, geometryTerrain;
 
-			var textureLoader = new THREE.TextureLoader();			
-			var mapT = textureLoader.load( "mapT.jpg" );
-			var mapTnormal = textureLoader.load( "mapTnormal.jpg" );
-			mapT.wrapS = mapT.wrapT = THREE.RepeatWrapping;
-			mapTnormal.wrapS = mapTnormal.wrapT = THREE.RepeatWrapping;
-			mapT.repeat.set( 96, 96 );
-			mapTnormal.repeat.set( 96, 96 );
+			
 		
 			var waterNormals, water;
 			var geometryWater, mirrorMesh;
@@ -1758,6 +1752,60 @@
 				param: 4,
 				filterparam: 1
 			};
+		
+		
+		
+		
+			var parametersOBJ = {
+				
+				WaterPlane: {
+					size: 512,
+					height: 8,
+					heightScale: 1,
+					speedX: 0.001,
+					speedY: 0,
+					material: {
+						normalMap: 'waternormals.jpg',
+						repeatTexture: 1,
+						alpha: 1,
+						sunColor: 0xffffff,
+						waterColor: 0x001e0f,
+						distortionScale: 50.0 // масштаб искажения
+					}
+				},
+				
+				Terrain: {
+					src: 'mapH.png',
+					size: 512,
+					heightMin: 0,
+					heightMax: 50,
+					material: {
+						map: 'mapT.jpg',
+						normalMap: 'mapTnormal.jpg',
+						repeatTexture: 96,
+						color: 0x725C47,
+						specular: 0xB79373,
+						shininess: 1.4						
+					}
+				},
+				
+				Sky: {
+					turbidity: 10,
+					rayleigh: 2,
+					mieCoefficient: 0.005,
+					mieDirectionalG: 0.8,
+					luminance: 1,
+					inclination: 0.49, // elevation / inclination
+					azimuth: 0.25, // Facing front,
+					sun: ! true,
+					distanceSun: 400000,
+					lensFlare: false
+				}
+			
+			};
+		
+		
+		
 		
 			var heightMAP = new Image();
 			heightMAP.onload = function () {
@@ -1835,62 +1883,64 @@
 				dirLight.position.set( 10, 10, 5 );
 				scene.add( dirLight );
 
-				// добавляем отображаемый Terrain				
-				heightData = getHeightData(heightMAP, params);
-				geometryTerrain = createTerrainMesh(heightMAP, heightData, params);				
+				
+				// добавляем отображаемый Terrain
+				var inf = parametersOBJ.Terrain;
+				heightData = getHeightData(heightMAP, inf);
+				geometryTerrain = createTerrainMesh(heightMAP, heightData, inf);				
+				var textureLoader = new THREE.TextureLoader();
+				var map = textureLoader.load(inf.material.map);
+				var normal = textureLoader.load(inf.material.normal);
+				map.wrapS = map.wrapT = THREE.RepeatWrapping;
+				normal.wrapS = normal.wrapT = THREE.RepeatWrapping;
+				var repeat = inf.material.repeatTexture;
+				if (repeat > 1) {
+					map.repeat.set(repeat, repeat);
+					normal.repeat.set(repeat, repeat);
+				}
 				var material = new THREE.MeshPhongMaterial( {
-					color: 0x725C47,
-					specular: 0xB79373,
-					shininess: 35,
-					map: mapT,	
-					normalMap: mapTnormal,
-					normalScale: new THREE.Vector2( 0.8, 0.8 )
+					color:		inf.material.color,
+					specular:	inf.material.specular,
+					shininess:	inf.material.shininess,
+					map:		map,	
+					normalMap:	normal,
+					normalScale:	new THREE.Vector2( 0.8, 0.8 )
 				} );
-				terrainMesh = new THREE.Mesh( geometryTerrain, material );
-				scene.add( terrainMesh );
+				terrainMesh = new THREE.Mesh(geometryTerrain, material);
+				scene.add(terrainMesh);
+				
 				
 				// добавляем водяную плоскость
-				waterNormals = new THREE.TextureLoader().load( 'waternormals.jpg' );
+				var inf = parametersOBJ.WaterPlane;
+				waterNormals = new THREE.TextureLoader().load(inf.material.normalMap);
 				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+				var repeat = inf.material.repeatTexture;
+				if (repeat > 1) waterNormals.repeat.set(repeat, repeat);
 				water = new THREE.Water( renderer, camera, scene, {
-					textureWidth: 512,
-					textureHeight: 512,
-					waterNormals: waterNormals,
-					alpha: 	1.0,
-					sunDirection: dirLight.position.clone().normalize(),
-					sunColor: 0xffffff,
-					waterColor: 0x001e0f,
-					distortionScale: 50.0,
-					fog: scene.fog != undefined
-				} );
-				// geometryWater = new THREE.PlaneBufferGeometry( parameters.width * 500, parameters.height * 500 );
-				geometryWater = new THREE.PlaneGeometry( parameters.width * 500, parameters.height * 500 , 255, 255 );
-				/*geometryWater.rotateX( - Math.PI / 2 );
-				for ( var i = 0, l = geometryWater.vertices.length; i < l; i ++ ) {
-					//geometryWater.vertices[ i ].y = 2 * Math.sin( i / 2 );
-					geometryWater.vertices[ i ].x = (l%(i+1)) * 100 - ( ( 256 * 100 ) / 2 );
-					geometryWater.vertices[ i ].z = Math.ceil(l/(i+1)) * 100 - ( ( 256 * 100 ) / 2 );
-				}*/
-				
+					textureWidth:	inf.size,
+					textureHeight:	inf.size,
+					waterNormals:	waterNormals,
+					alpha:		inf.material.alpha,
+					sunDirection:	dirLight.position.clone().normalize(),
+					sunColor:	inf.material.sunColor,
+					waterColor:	inf.material.waterColor,
+					distortionScale:inf.material.distortionScale,
+					fog:		scene.fog != undefined
+				} );				
+				geometryWater = new THREE.PlaneGeometry(inf.size, inf.size, inf.segments - 1, inf.segments - 1);
 				var k = 0;
-				for( var i = 0; i < 256; i++ ) {
-					for( var j = 0; j < 256; j++ ) {
-						var u = i / 256;
-						var v = j / 256;
-						geometryWater.vertices[ k ].x = i-256/2;
-						geometryWater.vertices[ k ].y = ( Math.cos( u * Math.PI * 8 ) + Math.sin( v * Math.PI * 8) ) / 1;
-						geometryWater.vertices[ k ].z = j-256/2;
+				for( var i = 0; i < inf.segments; i++ ) {
+					for( var j = 0; j < inf.segments; j++ ) {						
+						geometryWater.vertices[ k ].x = i - inf.segments/2;
+						geometryWater.vertices[ k ].y = (Math.cos((i/inf.segments) * Math.PI*8) + Math.sin((j/inf.segments) * Math.PI*8)) / 1;
+						geometryWater.vertices[ k ].z = j - inf.segments/2;
 						k++;
 					}
 				}
-				
-				
-				
-				
 				mirrorMesh = new THREE.Mesh(geometryWater, water.material);
-				mirrorMesh.rotation.x= Math.PI;
-				mirrorMesh.add( water );				
-				scene.add( mirrorMesh );
+				mirrorMesh.rotation.x = Math.PI;
+				mirrorMesh.add(water);				
+				scene.add(mirrorMesh);
 				
 				
 
@@ -1947,20 +1997,9 @@
 					geometryWater.vertices[i].z = Math.sin(d/2 + phase) * 2/(1 + d/5);					
 				}*/
 				
+				// обновление шейдера и геометрии плоскости воды
 				
-				var k = 0;
-				for( var i = 0; i < 256; i++ ) {
-					for( var j = 0; j < 256; j++ ) {
-						var u = (count/96) + i / 256;
-						var v = j / 256;						
-						geometryWater.vertices[ k ].y = ( Math.cos( u * Math.PI * 8 ) + Math.sin( v * Math.PI * 8) ) / 1;
-						k++;
-					}
-				}
-				mirrorMesh.geometry.verticesNeedUpdate = true;
 				
-				water.material.uniforms.time.value += 1.0 / 60.0;
-				//water.material.uniforms.u_time.value += dt / 1000;
 				controls.update( dt );
 				water.render();
 				renderer.render( scene, camera );				
@@ -2011,6 +2050,24 @@
 				terrainMesh.geometry.dispose();				
 				terrainMesh.geometry = geometry;
 			}
+		
+		
+			// обновление шейдера и геометрии плоскости воды
+			function updateWaterPlane(parametersOBJ.WaterPlane) {
+				var k = 0;
+				for( var i = 0; i < 256; i++ ) {
+					for( var j = 0; j < 256; j++ ) {
+						var u = offsetX + i/256;
+						var v = offsetY + j/256;						
+						geometryWater.vertices[k].y = (Math.cos((offsetX + i/256)*Math.PI*8) + Math.sin((offsetY + j/256)*Math.PI*8)) / 1;
+						k++;
+					}
+				}
+				mirrorMesh.geometry.verticesNeedUpdate = true;				
+				water.material.uniforms.time.value += 1.0 / 60.0;
+			}
+		
+			
 
 		// });
         </script>
