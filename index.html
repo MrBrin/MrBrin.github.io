@@ -1778,6 +1778,7 @@
 				window.addEventListener( 'keypress', onKey, false );
 				requestAnimationFrame( tick );
 				var dt = clock.getDelta();
+				var time = clock.getElapsedTime() * 10;
 				
 				for ( var i = 0, l = geometryWater.vertices.length; i < l; i ++ ) {
 					geometryWater.vertices[ i ].y = 5 * Math.sin( i / 5 + ( time + i ) / 7 );
