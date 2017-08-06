@@ -1607,6 +1607,7 @@
 			var waterNormals, water;
 			var geometryWater, mirrorMesh;
 			var count=0;
+			var phase = 0, speed = 1;
 			var sunSphere, sky;
 
 			// изменение параметров heightType, quality я не добавил в GUI по причине неведомой херни
@@ -1731,12 +1732,12 @@
 				} );
 				// geometryWater = new THREE.PlaneBufferGeometry( parameters.width * 500, parameters.height * 500 );
 				geometryWater = new THREE.PlaneGeometry( parameters.width * 500, parameters.height * 500 , 255, 255 );
-				geometryWater.rotateX( - Math.PI / 2 );
+				/*geometryWater.rotateX( - Math.PI / 2 );
 				for ( var i = 0, l = geometryWater.vertices.length; i < l; i ++ ) {
 					//geometryWater.vertices[ i ].y = 2 * Math.sin( i / 2 );
 					geometryWater.vertices[ i ].x = (l%(i+1)) * 100 - ( ( 256 * 100 ) / 2 );
 					geometryWater.vertices[ i ].z = Math.ceil(l/(i+1)) * 100 - ( ( 256 * 100 ) / 2 );
-				}
+				}*/
 				mirrorMesh = new THREE.Mesh(geometryWater, water.material);
 				mirrorMesh.add( water );				
 				scene.add( mirrorMesh );
@@ -1781,13 +1782,24 @@
 				requestAnimationFrame( tick );
 				var dt = clock.getDelta();
 				var time = clock.getElapsedTime() * 10;
-				
+				/*
 				for ( var i = 0, l = geometryWater.vertices.length; i < l; i ++ ) {
 					//geometryWater.vertices[ i ].y = 2 * Math.sin( i / 5 + ( time + i ) / 7 );
 					
-					geometryWater.vertices[ i ].y = ( Math.sin( ( (l%(i+1)) + count ) * 0.3 ) * 50 ) +
-							( Math.sin( ( Math.ceil(l/(i+1)) + count ) * 0.5 ) * 50 );
+					//geometryWater.vertices[ i ].y = ( Math.sin( ( (l%(i+1)) + count ) * 0.3 ) * 50 ) + ( Math.sin( ( Math.ceil(l/(i+1)) + count ) * 0.5 ) * 50 );
+				}*/
+				
+				
+				for(var i=0; i<geometryWater.vertices.length; i++){
+					var verticle = geometryWater.vertices[i];
+					with (verticle) {
+						var d = Math.sqrt(x*x + y*y);
+						z = Math.sin(d/2 + phase) * 6/(1 + d/15);
+					}
 				}
+				phase += speed;
+				
+				
 				mirrorMesh.geometry.verticesNeedUpdate = true;
 				
 				water.material.uniforms.time.value += 1.0 / 60.0;				
