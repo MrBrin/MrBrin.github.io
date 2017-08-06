@@ -1790,14 +1790,13 @@
 				}*/
 				
 				
-				for(var i=0; i<geometryWater.vertices.length; i++){
-					var verticle = geometryWater.vertices[i];
-					with (verticle) {
-						var d = Math.sqrt(x*x + y*y);
-						z = Math.sin(d/2 + phase) * 6/(1 + d/15);
-					}
+				for(var i=0; i<geometryWater.vertices.length; i++){					
+					var x = geometryWater.vertices[i].x;
+					var y = geometryWater.vertices[i].x;
+					var d = Math.sqrt(x*x + y*y);
+					geometryWater.vertices[i].z = Math.sin(d/2 + phase) * 2/(1 + d/5);					
 				}
-				phase += speed;
+				
 				
 				
 				mirrorMesh.geometry.verticesNeedUpdate = true;
@@ -1809,6 +1808,7 @@
 				
 				stats.update();
 				count += 0.1;
+				phase += speed;
 			}
 
 		
