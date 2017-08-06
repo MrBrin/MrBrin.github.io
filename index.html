@@ -1878,8 +1878,8 @@
 						var u = i / 256;
 						var v = j / 256;
 						geometryWater.vertices[ k ].x = i-256/2;
-						geometryWater.vertices[ k ].y = ( Math.cos( u * Math.PI * 8 ) + Math.sin( v * Math.PI * 8) ) / 20;
-						geometryWater.vertices[ k ].z = 256/2+j;
+						geometryWater.vertices[ k ].y = ( Math.cos( u * Math.PI * 8 ) + Math.sin( v * Math.PI * 8) ) / 1;
+						geometryWater.vertices[ k ].z = j-256/2;
 						k++;
 					}
 				}
@@ -1953,7 +1953,7 @@
 					for( var j = 0; j < 256; j++ ) {
 						var u = (count/96) + i / 256;
 						var v = j / 256;						
-						geometryWater.vertices[ k ].y = ( Math.cos( u * Math.PI * 8 ) + Math.sin( v * Math.PI * 8) ) / 20;
+						geometryWater.vertices[ k ].y = ( Math.cos( u * Math.PI * 8 ) + Math.sin( v * Math.PI * 8) ) / 1;
 						k++;
 					}
 				}
