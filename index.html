@@ -1877,9 +1877,9 @@
 					for( var j = 0; j < 256; j++ ) {
 						var u = i / 256;
 						var v = j / 256;
-						geometryWater.vertices[ k ].x = u - 0.5;
+						//geometryWater.vertices[ k ].x = u - 0.5;
 						geometryWater.vertices[ k ].y = ( Math.cos( u * Math.PI * 8 ) + Math.sin( v * Math.PI * 8) ) / 20;
-						geometryWater.vertices[ k ].z = v - 0.5;
+						//geometryWater.vertices[ k ].z = v - 0.5;
 						k++;
 					}
 				}
@@ -1888,7 +1888,7 @@
 				
 				
 				mirrorMesh = new THREE.Mesh(geometryWater, water.material);
-				mirrorMesh.rotation.x= - Math.PI/2;
+				//mirrorMesh.rotation.x= - Math.PI/2;
 				mirrorMesh.add( water );				
 				scene.add( mirrorMesh );
 				
@@ -1951,7 +1951,7 @@
 				var k = 0;
 				for( var i = 0; i < 256; i++ ) {
 					for( var j = 0; j < 256; j++ ) {
-						var u = count + i / 256;
+						var u = (count/1000) + i / 256;
 						var v = j / 256;						
 						geometryWater.vertices[ k ].y = ( Math.cos( u * Math.PI * 8 ) + Math.sin( v * Math.PI * 8) ) / 20;
 						k++;
