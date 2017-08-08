@@ -1822,7 +1822,7 @@
 				geometryTerrain = createTerrainMesh(heightMAP, heightData, inf);				
 				var textureLoader = new THREE.TextureLoader();
 				var map = textureLoader.load(inf.material.map);
-				var normal = textureLoader.load(inf.material.normal);
+				var normal = textureLoader.load(inf.material.normalMap);
 				map.wrapS = map.wrapT = THREE.RepeatWrapping;
 				normal.wrapS = normal.wrapT = THREE.RepeatWrapping;
 				var repeat = inf.material.repeatTexture;
