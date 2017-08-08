@@ -1825,15 +1825,15 @@
 				// инициализируем сцену, камеру, рендерный движок
 				container = document.getElementById( 'container' );
 				scene = new THREE.Scene();
-				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.2, 2000000  );
+				camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.2, 2000000);
 				camera.position.x = -4.84;
 				camera.position.y = 4.39;
 				camera.position.z = -35.11;
-				camera.lookAt( new THREE.Vector3( 0.33, -0.40, 0.85 ) );
+				camera.lookAt(new THREE.Vector3(0.33, -0.40, 0.85));
 				controls = new THREE.OrbitControls(camera);				
 				renderer = new THREE.WebGLRenderer(); //{antialias:true}				
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.setSize(window.innerWidth, window.innerHeight);
 
 				
 				// добавляем источники освещения
@@ -1870,9 +1870,9 @@
 				scene.add(terrainMesh);
 				
 				
-				// добавляем водяную плоскость
+				// добавляем водяную плоскость water mirrorMesh
 				var inf = parametersOBJ.WaterPlane;
-				waterNormals = new THREE.TextureLoader().load(inf.material.normalMap);
+				var waterNormals = new THREE.TextureLoader().load(inf.material.normalMap);
 				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 				var repeat = inf.material.repeatTexture;
 				if (repeat > 1) waterNormals.repeat.set(repeat, repeat);
@@ -1889,11 +1889,11 @@
 				} );				
 				geometryWater = new THREE.PlaneGeometry(inf.size, inf.size, inf.segments - 1, inf.segments - 1);
 				var k = 0;
-				for( var i = 0; i < inf.segments; i++ ) {
-					for( var j = 0; j < inf.segments; j++ ) {						
-						geometryWater.vertices[ k ].x = i - inf.segments/2;
-						geometryWater.vertices[ k ].y = (Math.cos((i/inf.segments) * Math.PI*8) + Math.sin((j/inf.segments) * Math.PI*8)) / 1;
-						geometryWater.vertices[ k ].z = j - inf.segments/2;
+				for (var i = 0; i < inf.segments; i++) {
+					for (var j = 0; j < inf.segments; j++) {						
+						geometryWater.vertices[k].x = i - inf.segments/2;
+						geometryWater.vertices[k].y = (Math.cos((i/inf.segments) * Math.PI*8) + Math.sin((j/inf.segments) * Math.PI*8)) / 1;
+						geometryWater.vertices[k].z = j - inf.segments/2;
 						k++;
 					}
 				}
@@ -1903,62 +1903,59 @@
 				scene.add(mirrorMesh);
 				
 				
-				// добавляем небо
+				// добавляем небо sky sunSphere
 				var inf = parametersOBJ.Sky;
 				sky = new THREE.Sky();
-				scene.add( sky.mesh );				
+				scene.add(sky.mesh);				
 				sunSphere = new THREE.Mesh(
-					new THREE.SphereBufferGeometry( 20000, 16, 8 ),
+					new THREE.SphereBufferGeometry(20000, 16, 8),
 					new THREE.MeshBasicMaterial( { color: 0xffffff } )
 				);
 				sunSphere.position.y = - 700000;
 				sunSphere.visible = false;
 				scene.add(sunSphere);				
-				var effectController  = {
-					turbidity:	inf.turbidity,
-					rayleigh:	inf.rayleigh,
-					mieCoefficient:	inf.mieCoefficient,
-					mieDirectionalG:inf.mieDirectionalG,
-					luminance:	inf.luminance,
-					inclination:	inf.inclination, // elevation / inclination
-					azimuth:	inf.azimuth, // Facing front,
-					sun:		inf.sun
-				};
 				var distance = inf.distance;
 				function settings_Sky() {
 					var uniforms = sky.uniforms;
-					uniforms.turbidity.value = effectController.turbidity;
-					uniforms.rayleigh.value = effectController.rayleigh;
-					uniforms.luminance.value = effectController.luminance;
-					uniforms.mieCoefficient.value = effectController.mieCoefficient;
-					uniforms.mieDirectionalG.value = effectController.mieDirectionalG;
-					var theta = Math.PI * ( effectController.inclination - 0.5 );
-					var phi = 2 * Math.PI * ( effectController.azimuth - 0.5 );
-					sunSphere.position.x = distance * Math.cos( phi );
-					sunSphere.position.y = distance * Math.sin( phi ) * Math.sin( theta );
-					sunSphere.position.z = distance * Math.sin( phi ) * Math.cos( theta );
-					sunSphere.visible = effectController.sun;
-					sky.uniforms.sunPosition.value.copy( sunSphere.position );
-					renderer.render( scene, camera );
+					uniforms.turbidity.value = inf.turbidity;
+					uniforms.rayleigh.value = inf.rayleigh;
+					uniforms.luminance.value = inf.luminance;
+					uniforms.mieCoefficient.value = inf.mieCoefficient;
+					uniforms.mieDirectionalG.value = inf.mieDirectionalG;
+					var theta = Math.PI * (inf.inclination - 0.5);
+					var phi = 2 * Math.PI * (inf.azimuth - 0.5);
+					sunSphere.position.x = distance * Math.cos(phi);
+					sunSphere.position.y = distance * Math.sin(phi) * Math.sin(theta);
+					sunSphere.position.z = distance * Math.sin(phi) * Math.cos(theta);
+					sunSphere.visible = inf.sun;
+					sky.uniforms.sunPosition.value.copy(sunSphere.position);
+					renderer.render(scene, camera);
 				}				
 				settings_Sky();
 				
 				
 				// добавляем рендерный движок и статистику в документ
 				container.innerHTML = "";
-				container.appendChild( renderer.domElement );
+				container.appendChild(renderer.domElement);
 				stats = new Stats();
 				stats.domElement.style.position = 'absolute';
 				stats.domElement.style.top = '0px';
-				container.appendChild( stats.domElement );
-				window.addEventListener( 'resize', onWindowResize, false );				
+				container.appendChild(stats.domElement);
+				window.addEventListener('resize', onWindowResize, false);				
 				
 
 				// добавляем интерфейс управления террейном
 				var gui = new dat.GUI( { width: 400 } );				
-				gui.add( params, 'sizeMap', 1, 1024 );							
-				gui.add( params, 'minH', -50, 50 );
-				gui.add( params, 'maxH', -50, 50 );				
+				gui.add( parametersOBJ, Terrain.size, 1, 1024 );
+				gui.add( parametersOBJ, WaterPlane.size, 1, 1024 );
+				gui.add( parametersOBJ, Terrain.heightMin, -50, 50 );
+				gui.add( parametersOBJ, Terrain.heightMax, -50, 50 );
+				gui.add( parametersOBJ, Terrain.shininess, 0, 10 );				
+				gui.add( parametersOBJ, WaterPlane.height, 1, 50 );
+				gui.add( parametersOBJ, WaterPlane.heightScale, 0, 50 );
+				gui.add( parametersOBJ, WaterPlane.speedX, 0.001, 0.01 );
+				gui.add( parametersOBJ, WaterPlane.speedY, 0.001, 0.01 );
+				gui.add( parametersOBJ, WaterPlane.alpha, 0, 1 );
 				gui.open();				
 
 			}
@@ -1981,22 +1978,7 @@
 				requestAnimationFrame( tick );
 				var dt = clock.getDelta();
 				var time = clock.getElapsedTime() * 10;
-				/*
-				for ( var i = 0, l = geometryWater.vertices.length; i < l; i ++ ) {
-					//geometryWater.vertices[ i ].y = 2 * Math.sin( i / 5 + ( time + i ) / 7 );
-					
-					//geometryWater.vertices[ i ].y = ( Math.sin( ( (l%(i+1)) + count ) * 0.3 ) * 50 ) + ( Math.sin( ( Math.ceil(l/(i+1)) + count ) * 0.5 ) * 50 );
-				}*/
 				
-				/*
-				for(var i=0; i<geometryWater.vertices.length; i++){					
-					var x = geometryWater.vertices[i].x;
-					var y = geometryWater.vertices[i].x;
-					var d = Math.sqrt(x*x + y*y);
-					geometryWater.vertices[i].z = Math.sin(d/2 + phase) * 2/(1 + d/5);					
-				}*/
-				
-				// обновление шейдера и геометрии плоскости воды
 				
 				
 				controls.update( dt );
