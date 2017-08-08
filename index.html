@@ -1737,7 +1737,7 @@
 				
 				WaterPlane: {
 					size: 512,
-					segments: 256,
+					segments: 32,
 					height: 8,
 					heightScale: 1,
 					speedX: 0.001,
@@ -1890,7 +1890,7 @@
 				sunSphere.position.y = - 700000;
 				sunSphere.visible = false;
 				scene.add(sunSphere);				
-				var distance = inf.distance;
+				var distance = inf.distanceSun;
 				function settings_Sky() {
 					var uniforms = sky.uniforms;
 					uniforms.turbidity.value = inf.turbidity;
