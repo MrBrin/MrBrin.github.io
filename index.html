@@ -1859,20 +1859,7 @@
 					distortionScale:inf.material.distortionScale,
 					fog:		scene.fog != undefined
 				} );
-				var M = inf.size;
-				var N = inf.segments;				
-				geometryWater = new THREE.PlaneGeometry(M, M, N - 1, N - 1);
-				var k = 0;
-				var h = inf.height;
-				var hS = inf.heightScale;				
-				for (var i = 0; i < N; i++) {
-					for (var j = 0; j < N; j++) {						
-						geometryWater.vertices[k].x = (i - N/2) * M/N;
-						geometryWater.vertices[k].y = (Math.cos((i/N) * Math.PI*h) + Math.sin((j/N) * Math.PI*h)) / hS;
-						geometryWater.vertices[k].z = (j - N/2) * M/N;
-						k++;
-					}
-				}
+				geometryWater = createWaterMesh(inf.size, inf.segments, inf.height, inf.heightScale);				
 				mirrorMesh = new THREE.Mesh(geometryWater, water.material);
 				mirrorMesh.rotation.x = Math.PI;
 				mirrorMesh.add(water);				
@@ -1995,6 +1982,21 @@
 					vertices[j + 1] = heightData[i];
 				}
 				geometry.computeVertexNormals();
+				return geometry;
+			}
+		
+		
+			// создание геометрии 3д-волны для водной плоскости
+			function createWaterMesh(size, segments, height, heightScale) {
+				var geometry = new THREE.PlaneGeometry(size, size, segments - 1, segments - 1);
+				for (var i = 0; i < segments; i++) {
+					for (var j = 0; j < segments; j++) {						
+						geometry.vertices[k].x = (i - (segments-1)/2) * size/(segments-1);
+						geometry.vertices[k].y = (Math.cos((i/segments) * Math.PI*height) + Math.sin((j/segments) * Math.PI*height)) / heightScale;
+						geometry.vertices[k].z = (j - (segments-1)/2) * size/(segments-1);
+						k++;
+					}
+				}
 				return geometry;
 			}
 
