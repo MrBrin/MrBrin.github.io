@@ -1858,17 +1858,18 @@
 					waterColor:	inf.material.waterColor,
 					distortionScale:inf.material.distortionScale,
 					fog:		scene.fog != undefined
-				} );				
-				geometryWater = new THREE.PlaneGeometry(inf.size, inf.size, inf.segments - 1, inf.segments - 1);
+				} );
+				var M = inf.size;
+				var N = inf.segments;				
+				geometryWater = new THREE.PlaneGeometry(M, M, N - 1, N - 1);
 				var k = 0;
 				var h = inf.height;
-				var hS = inf.heightScale;
-				var N = inf.segments;
+				var hS = inf.heightScale;				
 				for (var i = 0; i < N; i++) {
 					for (var j = 0; j < N; j++) {						
-						geometryWater.vertices[k].x = i - N/2;
+						geometryWater.vertices[k].x = (i - N/2) * M/N;
 						geometryWater.vertices[k].y = (Math.cos((i/N) * Math.PI*h) + Math.sin((j/N) * Math.PI*h)) / hS;
-						geometryWater.vertices[k].z = j - N/2;
+						geometryWater.vertices[k].z = (j - N/2) * M/N;
 						k++;
 					}
 				}
