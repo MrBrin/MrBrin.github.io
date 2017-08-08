@@ -1737,6 +1737,7 @@
 				
 				WaterPlane: {
 					size: 512,
+					segments: 256,
 					height: 8,
 					heightScale: 1,
 					speedX: 0.001,
@@ -1862,11 +1863,12 @@
 				var k = 0;
 				var h = inf.height;
 				var hS = inf.heightScale;
-				for (var i = 0; i < inf.segments; i++) {
-					for (var j = 0; j < inf.segments; j++) {						
-						geometryWater.vertices[k].x = i - inf.segments/2;
-						geometryWater.vertices[k].y = (Math.cos((i/inf.segments) * Math.PI*h) + Math.sin((j/inf.segments) * Math.PI*h)) / hS;
-						geometryWater.vertices[k].z = j - inf.segments/2;
+				var N = inf.segments;
+				for (var i = 0; i < N; i++) {
+					for (var j = 0; j < N; j++) {						
+						geometryWater.vertices[k].x = i - N/2;
+						geometryWater.vertices[k].y = (Math.cos((i/N) * Math.PI*h) + Math.sin((j/N) * Math.PI*h)) / hS;
+						geometryWater.vertices[k].z = j - N/2;
 						k++;
 					}
 				}
@@ -2008,11 +2010,12 @@
 			// обновление шейдера и геометрии плоскости воды
 			function updateWaterPlane(parameters) {
 				var k = 0;
+				var N = parameters.segments;
 				var h = parameters.height;
 				var hS = parameters.heightScale;
-				for (var i = 0; i < 256; i++) {
-					for (var j = 0; j < 256; j++) {												
-						geometryWater.vertices[k].y = (Math.cos((offsetX_Water + i/256)*Math.PI*h) + Math.sin((offsetY_Water + j/256)*Math.PI*h)) / hS;
+				for (var i = 0; i < N; i++) {
+					for (var j = 0; j < N; j++) {												
+						geometryWater.vertices[k].y = (Math.cos((offsetX_Water + i/N)*Math.PI*h) + Math.sin((offsetY_Water + j/N)*Math.PI*h)) / hS;
 						k++;
 					}
 				}
