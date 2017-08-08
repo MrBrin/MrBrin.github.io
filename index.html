@@ -1989,6 +1989,7 @@
 			// создание геометрии 3д-волны для водной плоскости
 			function createWaterMesh(size, segments, height, heightScale) {
 				var geometry = new THREE.PlaneGeometry(size, size, segments - 1, segments - 1);
+				var k = 0;
 				for (var i = 0; i < segments; i++) {
 					for (var j = 0; j < segments; j++) {						
 						geometry.vertices[k].x = (i - (segments-1)/2) * size/(segments-1);
