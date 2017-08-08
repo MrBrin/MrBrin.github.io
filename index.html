@@ -1726,36 +1726,13 @@
 			var clock = new THREE.Clock();
 			
 			
-			// объявляем глобальные переменные для террейна
+			// объявляем глобальные переменные для террейна, воды и неба
 			var terrainMesh, geometryTerrain;
-
-			
-		
-			var waterNormals, water;
-			var geometryWater, mirrorMesh;
-			var count=0;
-			var phase = 0, speed = 0.1;
+			var water, geometryWater, mirrorMesh, offsetX_Water = 0, offsetY_Water = 0;			
 			var sunSphere, sky;
 
-			// изменение параметров heightType, quality я не добавил в GUI по причине неведомой херни
-			var params = {				
-				sizeMap: 512,
-				minH: -10,
-				maxH: 10
-			};
-			var parameters = {
-				width: 1,
-				height: 1,
-				widthSegments: 250,
-				heightSegments: 250,
-				depth: 1500,
-				param: 4,
-				filterparam: 1
-			};
 		
-		
-		
-		
+			// параметры глобальных объектов карты
 			var parametersOBJ = {
 				
 				WaterPlane: {
@@ -1805,8 +1782,6 @@
 			};
 		
 		
-		
-		
 			var heightMAP = new Image();
 			heightMAP.onload = function () {
 				initScene();
@@ -1814,10 +1789,6 @@
 			};
 			heightMAP.src = parametersOBJ.Terrain.src;
 		
-			
-			function initSky() {				
-				
-			}
 		
 
 			function initScene() {
@@ -1870,7 +1841,7 @@
 				scene.add(terrainMesh);
 				
 				
-				// добавляем водяную плоскость water mirrorMesh
+				// добавляем водяную плоскость
 				var inf = parametersOBJ.WaterPlane;
 				var waterNormals = new THREE.TextureLoader().load(inf.material.normalMap);
 				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
@@ -1889,10 +1860,12 @@
 				} );				
 				geometryWater = new THREE.PlaneGeometry(inf.size, inf.size, inf.segments - 1, inf.segments - 1);
 				var k = 0;
+				var h = inf.height;
+				var hS = inf.heightScale;
 				for (var i = 0; i < inf.segments; i++) {
 					for (var j = 0; j < inf.segments; j++) {						
 						geometryWater.vertices[k].x = i - inf.segments/2;
-						geometryWater.vertices[k].y = (Math.cos((i/inf.segments) * Math.PI*8) + Math.sin((j/inf.segments) * Math.PI*8)) / 1;
+						geometryWater.vertices[k].y = (Math.cos((i/inf.segments) * Math.PI*h) + Math.sin((j/inf.segments) * Math.PI*h)) / hS;
 						geometryWater.vertices[k].z = j - inf.segments/2;
 						k++;
 					}
@@ -1903,7 +1876,7 @@
 				scene.add(mirrorMesh);
 				
 				
-				// добавляем небо sky sunSphere
+				// добавляем небо
 				var inf = parametersOBJ.Sky;
 				sky = new THREE.Sky();
 				scene.add(sky.mesh);				
@@ -1964,7 +1937,7 @@
 			function onWindowResize() {
 				camera.aspect = window.innerWidth / window.innerHeight;
 				camera.updateProjectionMatrix();
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize(window.innerWidth, window.innerHeight);
 			}
 
 		
@@ -2035,8 +2008,8 @@
 				var k = 0;
 				var h = parameters.height;
 				var hS = parameters.heightScale;
-				for( var i = 0; i < 256; i++ ) {
-					for( var j = 0; j < 256; j++ ) {												
+				for (var i = 0; i < 256; i++) {
+					for (var j = 0; j < 256; j++) {												
 						geometryWater.vertices[k].y = (Math.cos((offsetX_Water + i/256)*Math.PI*h) + Math.sin((offsetY_Water + j/256)*Math.PI*h)) / hS;
 						k++;
 					}
