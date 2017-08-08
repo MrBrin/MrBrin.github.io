@@ -1949,13 +1949,14 @@
 			function tick() {
 				window.addEventListener( 'keypress', onKey, false );
 				requestAnimationFrame( tick );
-				var dt = clock.getDelta();
-				var time = clock.getElapsedTime() * 10;				
+				var dt = clock.getDelta();							
 				controls.update(dt);
 				
 				
-				
+				updateWaterPlane(parametersOBJ.WaterPlane);
 				water.render();
+				
+				
 				renderer.render( scene, camera );				
 				stats.update();				
 			}
