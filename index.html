@@ -1812,7 +1812,7 @@
 				initScene();
 				tick();	
 			};
-			heightMAP.src = "mapH.png";
+			heightMAP.src = parametersOBJ.Terrain.src;
 		
 			
 			function initSky() {				
@@ -1977,27 +1977,24 @@
 				window.addEventListener( 'keypress', onKey, false );
 				requestAnimationFrame( tick );
 				var dt = clock.getDelta();
-				var time = clock.getElapsedTime() * 10;
+				var time = clock.getElapsedTime() * 10;				
+				controls.update(dt);
 				
 				
 				
-				controls.update( dt );
 				water.render();
 				renderer.render( scene, camera );				
-				
-				stats.update();
-				count += 0.1;
-				phase += speed;
+				stats.update();				
 			}
 
 		
 			// считывание высот с изображения "карта высот" для террайна
-			function getHeightData(img, params) {
-				var minH = params.minH, maxH = params.maxH;
+			function getHeightData(img, parameters) {
+				var minH = parameters.heightMin, maxH = parameters.heightMax;
 				var canvas = document.createElement( 'canvas' );
 				canvas.width = img.width;
 				canvas.height = img.height;
-				var size = canvas.width * canvas.height, data = new Float32Array( size );
+				var size = canvas.width * canvas.height, data = new Float32Array(size);
 				var context = canvas.getContext( '2d' );
 				context.drawImage(img, 0, 0);
 				var imgd = context.getImageData(0, 0, img.width, img.height);
@@ -2012,38 +2009,40 @@
 		
 		
 			// создание геометрии террейна по массиву высот
-			function createTerrainMesh(img, heightData, params) {
-				var geometry = new THREE.PlaneBufferGeometry(params.sizeMap, params.sizeMap, img.width - 1, img.height - 1);
-				geometry.rotateX( - Math.PI / 2 );				
+			function createTerrainMesh(img, heightData, parameters) {
+				var geometry = new THREE.PlaneBufferGeometry(parameters.size, parameters.size, img.width - 1, img.height - 1);
+				geometry.rotateX(- Math.PI / 2);				
 				var vertices = geometry.attributes.position.array;
-				for ( var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3 ) {
-					vertices[ j + 1 ] = heightData[ i ];
+				for (var i = 0, j = 0, l = vertices.length; i < l; i ++, j += 3) {
+					vertices[j + 1] = heightData[i];
 				}
 				geometry.computeVertexNormals();
-				return geometry;			
+				return geometry;
 			}
 
 		
 			// обновление геометрии террейна (для активного изменения ландшафта через интерфейс)
 			function reOptionTerrain() {
-				heightData = getHeightData(heightMAP, params);				
-				var geometry = createTerrainMesh(heightMAP, heightData, params);				
+				heightData = getHeightData(heightMAP, parametersOBJ.Terrain);				
+				var geometry = createTerrainMesh(heightMAP, heightData, parametersOBJ.Terrain);				
 				terrainMesh.geometry.dispose();				
 				terrainMesh.geometry = geometry;
 			}
 		
 		
 			// обновление шейдера и геометрии плоскости воды
-			function updateWaterPlane(parametersOBJ.WaterPlane) {
+			function updateWaterPlane(parameters) {
 				var k = 0;
+				var h = parameters.height;
+				var hS = parameters.heightScale;
 				for( var i = 0; i < 256; i++ ) {
-					for( var j = 0; j < 256; j++ ) {
-						var u = offsetX + i/256;
-						var v = offsetY + j/256;						
-						geometryWater.vertices[k].y = (Math.cos((offsetX + i/256)*Math.PI*8) + Math.sin((offsetY + j/256)*Math.PI*8)) / 1;
+					for( var j = 0; j < 256; j++ ) {												
+						geometryWater.vertices[k].y = (Math.cos((offsetX_Water + i/256)*Math.PI*h) + Math.sin((offsetY_Water + j/256)*Math.PI*h)) / hS;
 						k++;
 					}
 				}
+				offsetX_Water += parameters.speedX;
+				offsetY_Water += parameters.speedY;
 				mirrorMesh.geometry.verticesNeedUpdate = true;				
 				water.material.uniforms.time.value += 1.0 / 60.0;
 			}
