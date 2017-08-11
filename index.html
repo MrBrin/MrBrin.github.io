@@ -1913,11 +1913,11 @@
 				
 				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
 				smokeParticles = new THREE.Geometry;
-				for (var i = 0; i <= 30; i++) {
-				    var particle = new THREE.Vector3(Math.random() * 32 - 16, Math.random() * 230, Math.random() * 32 - 16);
+				for (var i = 0; i <= 5000; i++) {
+				    var particle = new THREE.Vector3(Math.random() * 256 - 128, Math.random() * 50, Math.random() * 256 - 128);
 				    smokeParticles.vertices.push(particle);
 				}
-				var smokeTexture = THREE.ImageUtils.loadTexture('smoke.png');
+				var smokeTexture = THREE.ImageUtils.loadTexture('cloud.png');
 				//var textureLoader = new THREE.TextureLoader();
 				//var smokeTexture = textureLoader.load( "smoke.png" );
 				/*var smokeMaterial = new THREE.PointsMaterial( {
@@ -1933,7 +1933,7 @@
 					map: smokeTexture,
 					transparent: true,
 					//blending: THREE.AdditiveBlending,
-					size: 50,
+					//size: 50,
 					//color: 0x111111,
 					depthTest: false
 				});
@@ -1997,7 +1997,7 @@
 				updateWaterPlane(parametersOBJ.WaterPlane);
 				water.render();
 				
-				var particleCount = smokeParticles.vertices.length;
+				/*var particleCount = smokeParticles.vertices.length;
 				while (particleCount--) {
 				    var particle = smokeParticles.vertices[particleCount];
 				    particle.y += dt * 50;
@@ -2007,7 +2007,7 @@
 					particle.z = Math.random() * 32 - 16;
 				    }
 				}
-				smokeParticles.verticesNeedUpdate = true;
+				smokeParticles.verticesNeedUpdate = true;*/
 				
 				
 				renderer.render( scene, camera );				
