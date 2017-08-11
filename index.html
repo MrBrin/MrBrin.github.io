@@ -1917,9 +1917,9 @@
 				    var particle = new THREE.Vector3(Math.random() * 32 - 16, Math.random() * 230, Math.random() * 32 - 16);
 				    smokeParticles.vertices.push(particle);
 				}
-				//var smokeTexture = THREE.ImageUtils.loadTexture('smoke.png');
-				var textureLoader = new THREE.TextureLoader();
-				var smokeTexture = textureLoader.load( "smoke.png" );
+				var smokeTexture = THREE.ImageUtils.loadTexture('smoke.png');
+				//var textureLoader = new THREE.TextureLoader();
+				//var smokeTexture = textureLoader.load( "smoke.png" );
 				var smokeMaterial = new THREE.PointsMaterial( {
 					size: 50,
 					map: smokeTexture,
