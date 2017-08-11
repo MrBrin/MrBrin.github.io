@@ -1836,7 +1836,7 @@
 				//var radiusRange = 50;
 				for( var i = 0; i < totalParticles; i++ ) 
 				{
-				    var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
+				    var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff, fog: true } );
 
 					var sprite = new THREE.Sprite( spriteMaterial );
 					sprite.scale.set( 32, 32, 1.0 ); // imageWidth, imageHeight
