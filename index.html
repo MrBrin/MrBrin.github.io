@@ -1917,19 +1917,29 @@
 				    var particle = new THREE.Vector3(Math.random() * 32 - 16, Math.random() * 230, Math.random() * 32 - 16);
 				    smokeParticles.vertices.push(particle);
 				}
-				var smokeTexture = THREE.ImageUtils.loadTexture('smoke.png');
+				//var smokeTexture = THREE.ImageUtils.loadTexture('smoke.png');
+				var textureLoader = new THREE.TextureLoader();
+				var smokeTexture = textureLoader.load( "smoke.png" );
+				var smokeMaterial = new THREE.PointsMaterial( {
+					size: 50,
+					map: smokeTexture,
+					blending: THREE.AdditiveBlending,
+					depthTest: false,
+					transparent : true
+				} );
 				
-				var smokeMaterial = new THREE.ParticleBasicMaterial({
+				/*var smokeMaterial = new THREE.ParticleBasicMaterial({
 					map: smokeTexture,
 					transparent: true,
 					//blending: THREE.AdditiveBlending,
 					size: 50
 					//color: 0x000000
-				});
+				});*/
 				
 				//var smokeMaterial = new THREE.SpriteMaterial( { map: smokeTexture, color: 0x000000 } );
 				
-				var smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
+				//var smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
+				var smoke = new THREE.Points( smokeParticles, smokeMaterial );
 				//smoke.sortParticles = true;
 				smoke.position.set(0, 51,0);				
 				scene.add(smoke);
