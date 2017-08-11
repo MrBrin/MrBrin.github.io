@@ -1831,7 +1831,7 @@
 				particleGroup = new THREE.Object3D();
 				//particleAttributes = { startSize: [], startPosition: [], randomness: [] };
 
-				var totalParticles = 200;
+				var totalParticles = 16000;
 				//var radiusRange = 50;
 				for( var i = 0; i < totalParticles; i++ ) 
 				{
@@ -1851,7 +1851,7 @@
 					//sprite.material.color.setHSL( Math.random(), 0.9, 0.7 ); 
 
 					// sprite.opacity = 0.80; // translucent particles
-					sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
+					//sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
 
 					particleGroup.add( sprite );
 					// add variable qualities to arrays, if they need to be accessed later
