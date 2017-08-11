@@ -1733,6 +1733,7 @@
 			var terrainMesh, geometryTerrain;
 			var water, geometryWater, mirrorMesh, offsetX_Water = 0, offsetY_Water = 0;			
 			var sunSphere, sky;
+			var smokeParticles;
 
 		
 			// параметры глобальных объектов карты
@@ -1900,6 +1901,20 @@
 				settings_Sky();
 				
 				
+				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
+				smokeParticles = new THREE.Geometry;
+				for (var i = 0; i <= 300; i++) {
+				    var particle = new THREE.Vector3(Math.random() * 32 - 16, Math.random() * 230, Math.random() * 32 - 16);
+				    smokeParticles.vertices.push(particle);
+				}
+				var smokeTexture = THREE.ImageUtils.loadTexture('smoke.png');
+				var smokeMaterial = new THREE.ParticleBasicMaterial({ map: smokeTexture, transparent: true, blending: THREE.AdditiveBlending, size: 50, color: 0x111111 });
+				var smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
+				smoke.sortParticles = true;
+				smoke.position.set(0, 51,0);				
+				scene.add(smoke);
+				
+				
 				// добавляем рендерный движок и статистику в документ
 				container.innerHTML = "";
 				container.appendChild(renderer.domElement);
@@ -1949,6 +1964,18 @@
 				
 				updateWaterPlane(parametersOBJ.WaterPlane);
 				water.render();
+				
+				var particleCount = smokeParticles.vertices.length;
+				while (particleCount--) {
+				    var particle = smokeParticles.vertices[particleCount];
+				    particle.y += delta * 50;
+				    if (particle.y >= 230) {
+					particle.y = Math.random() * 16;
+					particle.x = Math.random() * 32 - 16;
+					particle.z = Math.random() * 32 - 16;
+				    }
+				}
+				smokeParticles.verticesNeedUpdate = true;
 				
 				
 				renderer.render( scene, camera );				
