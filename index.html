@@ -1806,10 +1806,20 @@
 				camera.position.y = 4.39;
 				camera.position.z = -35.11;
 				camera.lookAt(new THREE.Vector3(0.33, -0.40, 0.85));
-				controls = new THREE.OrbitControls(camera);				
+				controls = new THREE.OrbitControls(camera);	
+				
+				// создаем рендерный движок и задаем ему параметры
+				renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true } );	
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.setSize(window.innerWidth, window.innerHeight);				
+				renderer.autoClear = false;	
+				renderer.gammaInput = true;
+				renderer.gammaOutput = true;
+				
+				/*
 				renderer = new THREE.WebGLRenderer(); //{antialias:true}				
 				renderer.setPixelRatio(window.devicePixelRatio);
-				renderer.setSize(window.innerWidth, window.innerHeight);
+				renderer.setSize(window.innerWidth, window.innerHeight);*/
 
 				
 				// добавляем источники освещения
