@@ -1733,7 +1733,7 @@
 			var terrainMesh, geometryTerrain;
 			var water, geometryWater, mirrorMesh, offsetX_Water = 0, offsetY_Water = 0;			
 			var sunSphere, sky;
-			var smokeParticles, smoke;
+			var smokeParticles, smoke, particleGroup;
 
 		
 			// параметры глобальных объектов карты
@@ -1823,6 +1823,8 @@
 				
 				
 				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
+				particleGroup = new THREE.Object3D();
+				
 				smokeParticles = new THREE.Geometry;
 				for (var i = 0; i <= 121; i++) {
 				    var particle = new THREE.Vector3(Math.random() * 256 - 128, Math.random() * 50, Math.random() * 256 - 128);
@@ -1853,9 +1855,11 @@
 				
 				//smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
 				smoke = new THREE.Points( smokeParticles, smokeMaterial );
+				particleGroup.add(smoke);
+				particleGroup.position.y = 24;
 				//smoke.sortParticles = true;
-				smoke.position.set(0, 24,0);				
-				scene.add(smoke);
+				//smoke.position.set(0, 24,0);				
+				scene.add(particleGroup);
 
 				
 				// добавляем источники освещения
