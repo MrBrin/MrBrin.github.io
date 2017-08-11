@@ -1917,7 +1917,7 @@
 				    var particle = new THREE.Vector3(Math.random() * 256 - 128, Math.random() * 50, Math.random() * 256 - 128);
 				    smokeParticles.vertices.push(particle);
 				}
-				var smokeTexture = THREE.ImageUtils.loadTexture('cloud.png');
+				var smokeTexture = THREE.ImageUtils.loadTexture('cloud2.png');
 				//var textureLoader = new THREE.TextureLoader();
 				//var smokeTexture = textureLoader.load( "smoke.png" );
 				/*var smokeMaterial = new THREE.PointsMaterial( {
@@ -1933,7 +1933,7 @@
 					map: smokeTexture,
 					transparent: true,
 					//blending: THREE.AdditiveBlending,
-					//size: 50,
+					size: 32,
 					//color: 0x111111,
 					depthTest: false
 				});
@@ -1943,7 +1943,7 @@
 				smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
 				//var smoke = new THREE.Points( smokeParticles, smokeMaterial );
 				smoke.sortParticles = true;
-				smoke.position.set(0, 51,0);				
+				smoke.position.set(0, 24,0);				
 				scene.add(smoke);
 				
 				
