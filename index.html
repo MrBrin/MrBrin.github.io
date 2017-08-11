@@ -1820,6 +1820,42 @@
 				renderer = new THREE.WebGLRenderer(); //{antialias:true}				
 				renderer.setPixelRatio(window.devicePixelRatio);
 				renderer.setSize(window.innerWidth, window.innerHeight);*/
+				
+				
+				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
+				smokeParticles = new THREE.Geometry;
+				for (var i = 0; i <= 121; i++) {
+				    var particle = new THREE.Vector3(Math.random() * 256 - 128, Math.random() * 50, Math.random() * 256 - 128);
+				    smokeParticles.vertices.push(particle);
+				}
+				//var smokeTexture = THREE.ImageUtils.loadTexture('cloud2.png');
+				var textureLoader = new THREE.TextureLoader();
+				var smokeTexture = textureLoader.load( "smoke.png" );
+				var smokeMaterial = new THREE.PointsMaterial( {
+					size: 50,
+					map: smokeTexture,
+					//blending: THREE.AdditiveBlending,
+					depthTest: false,
+					transparent : true
+					//color : 0xffffff
+				} );
+				
+				/*var smokeMaterial = new THREE.ParticleBasicMaterial({
+					map: smokeTexture,
+					transparent: true,
+					//blending: THREE.AdditiveBlending,
+					size: 50,
+					//color: 0x111111,
+					depthTest: false
+				});*/
+				
+				//var smokeMaterial = new THREE.SpriteMaterial( { map: smokeTexture, color: 0x000000 } );
+				
+				//smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
+				smoke = new THREE.Points( smokeParticles, smokeMaterial );
+				//smoke.sortParticles = true;
+				smoke.position.set(0, 24,0);				
+				scene.add(smoke);
 
 				
 				// добавляем источники освещения
@@ -1911,40 +1947,7 @@
 				settings_Sky();
 				
 				
-				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
-				smokeParticles = new THREE.Geometry;
-				for (var i = 0; i <= 121; i++) {
-				    var particle = new THREE.Vector3(Math.random() * 256 - 128, Math.random() * 50, Math.random() * 256 - 128);
-				    smokeParticles.vertices.push(particle);
-				}
-				//var smokeTexture = THREE.ImageUtils.loadTexture('cloud2.png');
-				var textureLoader = new THREE.TextureLoader();
-				var smokeTexture = textureLoader.load( "smoke.png" );
-				var smokeMaterial = new THREE.PointsMaterial( {
-					size: 50,
-					map: smokeTexture,
-					//blending: THREE.AdditiveBlending,
-					depthTest: false,
-					transparent : true
-					//color : 0xffffff
-				} );
 				
-				/*var smokeMaterial = new THREE.ParticleBasicMaterial({
-					map: smokeTexture,
-					transparent: true,
-					//blending: THREE.AdditiveBlending,
-					size: 50,
-					//color: 0x111111,
-					depthTest: false
-				});*/
-				
-				//var smokeMaterial = new THREE.SpriteMaterial( { map: smokeTexture, color: 0x000000 } );
-				
-				//smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
-				smoke = new THREE.Points( smokeParticles, smokeMaterial );
-				//smoke.sortParticles = true;
-				smoke.position.set(0, 24,0);				
-				scene.add(smoke);
 				
 				
 				// добавляем рендерный движок и статистику в документ
