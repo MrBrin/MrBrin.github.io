@@ -1920,22 +1920,23 @@
 				var smokeTexture = THREE.ImageUtils.loadTexture('smoke.png');
 				//var textureLoader = new THREE.TextureLoader();
 				//var smokeTexture = textureLoader.load( "smoke.png" );
-				var smokeMaterial = new THREE.PointsMaterial( {
+				/*var smokeMaterial = new THREE.PointsMaterial( {
 					size: 50,
 					map: smokeTexture,
 					blending: THREE.AdditiveBlending,
-					depthTest: true,
+					depthTest: false,
 					transparent : true,
 					color : 0xffffff
-				} );
+				} );*/
 				
-				/*var smokeMaterial = new THREE.ParticleBasicMaterial({
+				var smokeMaterial = new THREE.ParticleBasicMaterial({
 					map: smokeTexture,
 					transparent: true,
-					//blending: THREE.AdditiveBlending,
-					size: 50
-					//color: 0x000000
-				});*/
+					blending: THREE.AdditiveBlending,
+					size: 50,
+					color: 0x000000,
+					depthTest: false
+				});
 				
 				//var smokeMaterial = new THREE.SpriteMaterial( { map: smokeTexture, color: 0x000000 } );
 				
