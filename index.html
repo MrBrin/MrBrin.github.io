@@ -1913,7 +1913,7 @@
 				
 				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
 				smokeParticles = new THREE.Geometry;
-				for (var i = 0; i <= 5000; i++) {
+				for (var i = 0; i <= 121; i++) {
 				    var particle = new THREE.Vector3(Math.random() * 256 - 128, Math.random() * 50, Math.random() * 256 - 128);
 				    smokeParticles.vertices.push(particle);
 				}
@@ -1933,7 +1933,7 @@
 					map: smokeTexture,
 					transparent: true,
 					//blending: THREE.AdditiveBlending,
-					size: 32,
+					size: 50,
 					//color: 0x111111,
 					depthTest: false
 				});
