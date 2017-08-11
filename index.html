@@ -1733,7 +1733,7 @@
 			var terrainMesh, geometryTerrain;
 			var water, geometryWater, mirrorMesh, offsetX_Water = 0, offsetY_Water = 0;			
 			var sunSphere, sky;
-			var smokeParticles;
+			var smokeParticles, smoke;
 
 		
 			// параметры глобальных объектов карты
@@ -1940,7 +1940,7 @@
 				
 				//var smokeMaterial = new THREE.SpriteMaterial( { map: smokeTexture, color: 0x000000 } );
 				
-				var smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
+				smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
 				//var smoke = new THREE.Points( smokeParticles, smokeMaterial );
 				//smoke.sortParticles = true;
 				smoke.position.set(0, 51,0);				
