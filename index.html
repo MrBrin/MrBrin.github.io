@@ -1908,7 +1908,12 @@
 				    smokeParticles.vertices.push(particle);
 				}
 				var smokeTexture = THREE.ImageUtils.loadTexture('smoke.png');
-				var smokeMaterial = new THREE.ParticleBasicMaterial({ map: smokeTexture, transparent: true, blending: THREE.AdditiveBlending, size: 50, color: 0x111111 });
+				var smokeMaterial = new THREE.ParticleBasicMaterial({
+					map: smokeTexture,
+					transparent: true,
+					blending: THREE.AdditiveBlending,
+					size: 50
+				});
 				var smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
 				smoke.sortParticles = true;
 				smoke.position.set(0, 51,0);				
