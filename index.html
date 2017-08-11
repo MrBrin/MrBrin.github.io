@@ -1941,7 +1941,7 @@
 				//var smokeMaterial = new THREE.SpriteMaterial( { map: smokeTexture, color: 0x000000 } );
 				
 				//smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
-				var smoke = new THREE.Points( smokeParticles, smokeMaterial );
+				smoke = new THREE.Points( smokeParticles, smokeMaterial );
 				//smoke.sortParticles = true;
 				smoke.position.set(0, 24,0);				
 				scene.add(smoke);
