@@ -1801,6 +1801,7 @@
 				// инициализируем сцену, камеру, рендерный движок
 				container = document.getElementById( 'container' );
 				scene = new THREE.Scene();
+				scene.fog = new THREE.FogExp2( 0xefd1b5, 0.0025 );
 				camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.2, 2000000);
 				camera.position.x = -4.84;
 				camera.position.y = 4.39;
@@ -1831,7 +1832,7 @@
 				particleGroup = new THREE.Object3D();
 				//particleAttributes = { startSize: [], startPosition: [], randomness: [] };
 
-				var totalParticles = 1600;
+				var totalParticles = 256;
 				//var radiusRange = 50;
 				for( var i = 0; i < totalParticles; i++ ) 
 				{
@@ -1850,7 +1851,7 @@
 					// sprite.color.setRGB( Math.random(),  Math.random(),  Math.random() ); 
 					//sprite.material.color.setHSL( Math.random(), 0.9, 0.7 ); 
 
-					// sprite.opacity = 0.80; // translucent particles
+					sprite.opacity = 0.80; // translucent particles
 					//sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
 
 					particleGroup.add( sprite );
