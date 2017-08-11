@@ -1968,7 +1968,7 @@
 				var particleCount = smokeParticles.vertices.length;
 				while (particleCount--) {
 				    var particle = smokeParticles.vertices[particleCount];
-				    particle.y += delta * 50;
+				    particle.y += dt * 50;
 				    if (particle.y >= 230) {
 					particle.y = Math.random() * 16;
 					particle.x = Math.random() * 32 - 16;
