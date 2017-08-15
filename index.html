@@ -1828,40 +1828,32 @@
 				
 				
 				
-				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ				
-				var particleTextures = [];
-				particleTextures[0] = 'cloud01.png';
-				particleTextures[1] = 'cloud02.png';
-				particleGroup = createFogDust(256, 50, 256, particleTextures, 32, 1, 0x111111, 1, 1);
+				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
+				var textureLoader = new THREE.TextureLoader();
+				var particleTexture = textureLoader.load('cloud02.png');
+				
+				particleGroup = createFogDust(256, 50, 256, particleTexture, 32, 1, 0x111111, 1, 1);
 				particleGroup.position.set(0, 30, 0);
 				scene.add(particleGroup);
 
 				
-				function createFogDust(width, height, depth, textures, scale, total, color, alpha, blendMode) {
+				function createFogDust(width, height, depth, texture, scale, total, color, alpha, blendMode) {
 					var blendings = [ "NoBlending", "NormalBlending", "AdditiveBlending", "SubtractiveBlending", "MultiplyBlending" ];
 					var blending = blendings[blendMode];
-					var particleGroup = new THREE.Object3D();					
-					var img = [];
-					var len = textures.length - 1;
-					var textureLoader = new THREE.TextureLoader();				
-					for (var i = 0; i <= len; i++) {
-						img[i] = textureLoader.load(textures[i]);
-					}					
-					for (var i = 0; i < total; i++) {
-						var id = Math.round(Math.random() * len);
-						var spriteMaterial = new THREE.SpriteMaterial({
-							map: img[id],
-							useScreenCoordinates: false,
-							color: color,
-							fog: true
-						});
-						var sprite = new THREE.Sprite(spriteMaterial);
-						var wScale = 1, hScale = 1;
-						if (img[id].image.width >= img[id].image.height) {							
-							hScale = img[id].image.height / img[id].image.width;
-						} else {
-							wScale = img[id].image.width / img[id].image.height;
-						}
+					var particleGroup = new THREE.Object3D();
+					var spriteMaterial = new THREE.SpriteMaterial({
+						map: texture,
+						useScreenCoordinates: false,
+						color: color,
+						fog: true
+					});
+					var wScale, hScale, wh = texture.image.width / texture.image.height;
+					console.log(texture);
+					console.log(wh);
+					wScale = wh <= 1 ? wh : 1;
+					hScale = wh <= 1 ? 1 : wh;					
+					for (var i = 0; i < total; i++) {						
+						var sprite = new THREE.Sprite(spriteMaterial);						
 						sprite.scale.set(wScale * scale, hScale * scale, 1.0);
 						sprite.opacity = alpha;
 						sprite.material.blending = THREE[blending];
