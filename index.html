@@ -1855,7 +1855,7 @@
 							fog: true
 						});
 						var sprite = new THREE.Sprite(spriteMaterial);
-						//sprite.scale.set(scale, scale, 1.0);
+						sprite.scale.set(scale, scale, 1.0);
 						sprite.opacity = alpha;
 						sprite.material.blending = THREE[blending];
 						sprite.position.set(Math.random() * width - width/2, Math.random() * height - height/2, Math.random() * depth - depth/2);
