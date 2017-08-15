@@ -1849,7 +1849,7 @@
 					}					
 					for (var i = 0; i < total; i++) {						
 						var spriteMaterial = new THREE.SpriteMaterial({
-							map: img[Math.random() * len],
+							map: img[Math.round(Math.random() * len)],
 							useScreenCoordinates: false,
 							color: color,
 							fog: true
