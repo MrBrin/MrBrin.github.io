@@ -1843,8 +1843,9 @@
 					var particleGroup = new THREE.Object3D();					
 					var img = [];
 					var len = textures.length - 1;
+					var textureLoader = new THREE.TextureLoader();				
 					for (var i = 0; i <= len; i++) {
-						img[i] = THREE.ImageUtils.loadTexture(textures[i]);
+						img[i] = textureLoader.load(textures[i]);
 					}					
 					for (var i = 0; i < total; i++) {						
 						var spriteMaterial = new THREE.SpriteMaterial({
