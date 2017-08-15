@@ -1847,9 +1847,10 @@
 						color: color,
 						fog: true
 					});
+					console.log(texture.image.width, texture.image.height);
 					var wScale, hScale, wh = texture.image.width / texture.image.height;
 					console.log(texture);
-					console.log(wh);
+					console.log(texture.image.width, texture.image.height);
 					wScale = wh <= 1 ? wh : 1;
 					hScale = wh <= 1 ? 1 : wh;					
 					for (var i = 0; i < total; i++) {						
@@ -1860,6 +1861,7 @@
 						sprite.position.set(Math.random() * width - width/2, Math.random() * height - height/2, Math.random() * depth - depth/2);
 						particleGroup.add(sprite);
 					}
+					console.log(texture.image.width, texture.image.height);
 					return particleGroup;
 				}
 				
