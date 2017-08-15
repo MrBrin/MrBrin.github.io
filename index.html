@@ -1830,22 +1830,25 @@
 				
 				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ				
 				var particleTextures = [];
-				particleTextures[0] = THREE.ImageUtils.loadTexture( 'cloud01.png' );
-				particleTextures[1] = THREE.ImageUtils.loadTexture( 'cloud02.png' );
-				particleGroup = createFogDust(256, 50, 256, particleTextures, 32, 1, '0x111111', 1, 1);
+				particleTextures[0] = 'cloud01.png';
+				particleTextures[1] = 'cloud02.png';
+				particleGroup = createFogDust(256, 50, 256, particleTextures, 32, 1, 0x111111, 1, 1);
 				particleGroup.position.set(0, 30, 0);
 				scene.add(particleGroup);
-				
 
 				
 				function createFogDust(width, height, depth, textures, scale, total, color, alpha, blendMode) {
 					var blendings = [ "NoBlending", "NormalBlending", "AdditiveBlending", "SubtractiveBlending", "MultiplyBlending" ];
 					var blending = blendings[blendMode];
-					var particleGroup = new THREE.Object3D();
-					for (var i = 0; i < total; i++) {
-						var len = textures.length - 1;
+					var particleGroup = new THREE.Object3D();					
+					var img = [];
+					var len = textures.length - 1;
+					for (var i = 0; i <= len; i++) {
+						img[i] = THREE.ImageUtils.loadTexture(textures[i]);
+					}					
+					for (var i = 0; i < total; i++) {						
 						var spriteMaterial = new THREE.SpriteMaterial({
-							map: textures[Math.random() * len],
+							map: img[Math.random() * len],
 							useScreenCoordinates: false,
 							color: color,
 							fog: true
