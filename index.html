@@ -1825,78 +1825,37 @@
 				
 				
 				
-				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
-				//particleGroup = new THREE.Object3D();
-				var particleTexture = THREE.ImageUtils.loadTexture( 'cloud2.png' );
+				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ				
+				var particleTextures = [];
+				particleTextures[0] = THREE.ImageUtils.loadTexture( 'cloud01.png' );
+				particleTextures[1] = THREE.ImageUtils.loadTexture( 'cloud02.png' );
+				particleGroup = createFogDust(256, 50, 256, particleTextures, 32, 1, '0x111111', 1, 1);
+				particleGroup.position.set(0, 30, 0);
+				scene.add(particleGroup);
+				
 
-				particleGroup = new THREE.Object3D();
-				//particleAttributes = { startSize: [], startPosition: [], randomness: [] };
-
-				var totalParticles = 256;
-				//var radiusRange = 50;
-				for( var i = 0; i < totalParticles; i++ ) 
-				{
-				    var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff, fog: true } );
-
-					var sprite = new THREE.Sprite( spriteMaterial );
-					sprite.scale.set( 32, 32, 1.0 ); // imageWidth, imageHeight
-					sprite.position.set(Math.random() * 256 - 128, Math.random() * 50, Math.random() * 256 - 128);
-					// for a cube:
-					// sprite.position.multiplyScalar( radiusRange );
-					// for a solid sphere:
-					// sprite.position.setLength( radiusRange * Math.random() );
-					// for a spherical shell:
-					//sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
-
-					// sprite.color.setRGB( Math.random(),  Math.random(),  Math.random() ); 
-					//sprite.material.color.setHSL( Math.random(), 0.9, 0.7 ); 
-
-					sprite.opacity = 0.80; // translucent particles
-					//sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
-
-					particleGroup.add( sprite );
-					// add variable qualities to arrays, if they need to be accessed later
-					//particleAttributes.startPosition.push( sprite.position.clone() );
-					//particleAttributes.randomness.push( Math.random() );
+				
+				function createFogDust(width, height, depth, textures, scale, total, color, alpha, blendMode) {
+					var blendings = [ "NoBlending", "NormalBlending", "AdditiveBlending", "SubtractiveBlending", "MultiplyBlending" ];
+					var blending = blendings[blendMode];
+					var particleGroup = new THREE.Object3D();
+					for (var i = 0; i < total; i++) {
+						var len = textures.length - 1;
+						var spriteMaterial = new THREE.SpriteMaterial({
+							map: textures[Math.random() * len],
+							useScreenCoordinates: false,
+							color: color,
+							fog: true
+						});
+						var sprite = new THREE.Sprite(spriteMaterial);
+						sprite.scale.set(scale, scale, 1.0);
+						sprite.opacity = alpha;
+						sprite.material.blending = THREE[blending];
+						sprite.position.set(Math.random() * width - width/2, Math.random() * height - height/2, Math.random() * depth - depth/2);
+						particleGroup.add(sprite);
+					}
+					return particleGroup;
 				}
-				particleGroup.position.y = 50;
-				scene.add( particleGroup );
-				
-				/*smokeParticles = new THREE.Geometry;
-				for (var i = 0; i <= 121; i++) {
-				    var particle = new THREE.Vector3(Math.random() * 256 - 128, Math.random() * 50, Math.random() * 256 - 128);
-				    smokeParticles.vertices.push(particle);
-				}
-				//var smokeTexture = THREE.ImageUtils.loadTexture('cloud2.png');
-				var textureLoader = new THREE.TextureLoader();
-				var smokeTexture = textureLoader.load( "smoke.png" );
-				var smokeMaterial = new THREE.PointsMaterial( {
-					size: 50,
-					map: smokeTexture,
-					//blending: THREE.AdditiveBlending,
-					depthTest: false,
-					transparent : true
-					//color : 0xffffff
-				} );
-				
-				/*var smokeMaterial = new THREE.ParticleBasicMaterial({
-					map: smokeTexture,
-					transparent: true,
-					//blending: THREE.AdditiveBlending,
-					size: 50,
-					//color: 0x111111,
-					depthTest: false
-				});*/
-				
-				//var smokeMaterial = new THREE.SpriteMaterial( { map: smokeTexture, color: 0x000000 } );
-				
-				//smoke = new THREE.ParticleSystem(smokeParticles, smokeMaterial);
-				//smoke = new THREE.Points( smokeParticles, smokeMaterial );
-				//particleGroup.add(smoke);
-				//particleGroup.position.y = 24;
-				//smoke.sortParticles = true;
-				//smoke.position.set(0, 24,0);				
-				//scene.add(particleGroup);
 				
 				
 				
