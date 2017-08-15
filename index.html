@@ -1714,6 +1714,8 @@
 	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/SkyShader.js"></script>
         <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/libs/stats.min.js"></script>
 	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/DDSLoader.js"></script>
+	<script src="https://rawgit.com/jbouny/fft-ocean/master/js/shaders/CloudShader2.js"></script>
+	    
 	<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/libs/dat.gui.min.js"></script>
 	<!--    
 	<script src="https://cdn.rawgit.com/zz85/zz85-bookmarklets/master/js/ThreeInspector.js"></script>
@@ -1734,6 +1736,7 @@
 			var water, geometryWater, mirrorMesh, offsetX_Water = 0, offsetY_Water = 0;			
 			var sunSphere, sky;
 			var smokeParticles, smoke, particleGroup;
+			var CloudShader;
 
 		
 			// параметры глобальных объектов карты
@@ -1848,7 +1851,7 @@
 							fog: true
 						});
 						var sprite = new THREE.Sprite(spriteMaterial);
-						sprite.scale.set(scale, scale, 1.0);
+						//sprite.scale.set(scale, scale, 1.0);
 						sprite.opacity = alpha;
 						sprite.material.blending = THREE[blending];
 						sprite.position.set(Math.random() * width - width/2, Math.random() * height - height/2, Math.random() * depth - depth/2);
@@ -1858,8 +1861,10 @@
 				}
 				
 				
-				
-				
+				// добавляем шейдер облаков
+				CloudShader = new CloudShader(renderer);
+				CloudShader.cloudMesh.scale.multiplyScalar(4.0);
+				scene.add(CloudShader.cloudMesh);
 				
 				
 				
@@ -2004,6 +2009,8 @@
 				var dt = clock.getDelta();							
 				controls.update(dt);
 				
+				
+				CloudShader.update();
 				
 				updateWaterPlane(parametersOBJ.WaterPlane);
 				water.render();
