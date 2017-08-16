@@ -1809,10 +1809,16 @@
 				
 				// загрузка ресурсов текстур
 				particleTexture = loadImage.load(sources[0]);
-				particleTexture.onLoad = function () {countSource++};
+				particleTexture.onLoad = function () {
+					countSource++;
+					console.log('//', countSource);
+				};
 				
 				// кэллбэк выполнится только в том случае, когда все ресурсы будут загружены
-				if (countSource == nSources) callback();
+				if (countSource == nSources) {
+					console.log('start');
+					callback();
+				}
 			}
 		
 			
