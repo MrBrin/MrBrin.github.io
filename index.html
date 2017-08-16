@@ -1736,7 +1736,7 @@
 			var water, geometryWater, mirrorMesh, offsetX_Water = 0, offsetY_Water = 0;			
 			var sunSphere, sky;
 			var smokeParticles, smoke, particleGroup;
-			var CloudShader, particleTexture;
+			var CloudShader, particleTexture, waterNormals;
 
 		
 			// параметры глобальных объектов карты
@@ -1794,6 +1794,7 @@
 			heightMAP.onload = function () {
 				var sources = [];
 				sources[0] = 'cloud02.png';
+				sources[1] = 'waternormals.jpg';
 				loadSource(sources, function(a, b) {
 					console.log('+++' ,a, b);
 					if (a == b) {
@@ -1812,7 +1813,8 @@
 				var loadImage = new THREE.TextureLoader(manager);
 				
 				// загрузка ресурсов текстур
-				particleTexture = loadImage.load(sources[0]);
+				particleTexture = loadImage.load(sources[0]);				
+				waterNormals = loadImage.load(sources[1]);
 				
 				
 				manager.onLoad = function () {
@@ -1930,7 +1932,7 @@
 				
 				// добавляем водяную плоскость
 				var inf = parametersOBJ.WaterPlane;
-				var waterNormals = new THREE.TextureLoader().load(inf.material.normalMap);
+				
 				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 				var repeat = inf.material.repeatTexture;
 				if (repeat > 1) waterNormals.repeat.set(repeat, repeat);
