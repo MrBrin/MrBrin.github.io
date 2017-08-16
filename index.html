@@ -1795,7 +1795,7 @@
 				var sources = [];
 				sources[0] = 'cloud02.png';
 				loadSource(sources, function(a, b) {
-					console.log(a, b);
+					console.log('+++' ,a, b);
 					if (a == b) {
 						initScene();
 						tick();
@@ -1817,11 +1817,11 @@
 				
 				manager.onLoad = function () {
 					countSource++;
-					console.log('//', countSource, nSources, sources.length);
+					callback(countSource, nSources);
 				};
 				
 				// кэллбэк выполнится только в том случае, когда все ресурсы будут загружены
-				callback(countSource, nSources);
+				
 				
 			}
 		
