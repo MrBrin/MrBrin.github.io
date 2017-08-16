@@ -1736,7 +1736,7 @@
 			var water, geometryWater, mirrorMesh, offsetX_Water = 0, offsetY_Water = 0;			
 			var sunSphere, sky;
 			var smokeParticles, smoke, particleGroup;
-			var CloudShader;
+			var CloudShader, particleTexture;
 
 		
 			// параметры глобальных объектов карты
@@ -1792,10 +1792,30 @@
 		
 			var heightMAP = new Image();
 			heightMAP.onload = function () {
-				initScene();
-				tick();	
+				var sources = [];
+				sources[0] = 'cloud02.png';
+				loadSource(sources, function() {
+					initScene();
+					tick();	
+				});
 			};
 			heightMAP.src = parametersOBJ.Terrain.src;
+		
+		
+			function loadSource(sources, callback) {
+				var countSource = 0, nSources = sources.length;
+				var loadAudio = new THREE.AudioLoader();
+				var loadImage = new THREE.TextureLoader();
+				
+				// загрузка ресурсов текстур
+				particleTexture = loadImage.load(sources[0]);
+				particleTexture.onLoad = function () {countSource++};
+				
+				// кэллбэк выполнится только в том случае, когда все ресурсы будут загружены
+				if (countSource == nSources) callback();
+			}
+		
+			
 		
 		
 
@@ -1829,13 +1849,9 @@
 				
 				
 				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
-				var textureLoader = new THREE.TextureLoader();
-				var particleTexture = textureLoader.load('cloud02.png');
-				
 				particleGroup = createFogDust(256, 50, 256, particleTexture, 32, 1, 0x111111, 1, 1);
 				particleGroup.position.set(0, 30, 0);
 				scene.add(particleGroup);
-
 				
 				function createFogDust(width, height, depth, texture, scale, total, color, alpha, blendMode) {
 					var blendings = [ "NoBlending", "NormalBlending", "AdditiveBlending", "SubtractiveBlending", "MultiplyBlending" ];
@@ -1846,11 +1862,8 @@
 						useScreenCoordinates: false,
 						color: color,
 						fog: true
-					});
-					console.log(texture.image.width, texture.image.height);
-					var wScale, hScale, wh = texture.image.width / texture.image.height;
-					console.log(texture);
-					console.log(texture.image.width, texture.image.height);
+					});					
+					var wScale, hScale, wh = texture.image.width / texture.image.height;					
 					wScale = wh <= 1 ? wh : 1;
 					hScale = wh <= 1 ? 1 : wh;					
 					for (var i = 0; i < total; i++) {						
@@ -1860,8 +1873,7 @@
 						sprite.material.blending = THREE[blending];
 						sprite.position.set(Math.random() * width - width/2, Math.random() * height - height/2, Math.random() * depth - depth/2);
 						particleGroup.add(sprite);
-					}
-					console.log(texture.image.width, texture.image.height);
+					}					
 					return particleGroup;
 				}
 				
@@ -1871,10 +1883,6 @@
 				CloudShader.cloudMesh.scale.multiplyScalar(4.0);
 				scene.add(CloudShader.cloudMesh);
 				
-				
-				
-				
-
 				
 				// добавляем источники освещения
 				var ambientLight = new THREE.AmbientLight( 0x404040 );
