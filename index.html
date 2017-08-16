@@ -1875,7 +1875,7 @@
 					});					
 					var wScale, hScale, wh = texture.image.width / texture.image.height;					
 					wScale = wh <= 1 ? wh : 1;
-					hScale = wh <= 1 ? 1 : wh;					
+					hScale = wh <= 1 ? 1 : 1/wh;					
 					for (var i = 0; i < total; i++) {						
 						var sprite = new THREE.Sprite(spriteMaterial);						
 						sprite.scale.set(wScale * scale, hScale * scale, 1.0);
