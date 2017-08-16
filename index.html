@@ -1795,9 +1795,9 @@
 				var sources = [];
 				sources[0] = 'cloud02.png';
 				sources[1] = 'waternormals.jpg';
-				loadSource(sources, function(a, b) {
-					console.log('+++' ,a, b);
-					if (a == b) {
+				loadSource(sources, function(e) {
+					console.log('+++' ,e);
+					if (e) {
 						initScene();
 						tick();
 					}
@@ -1813,15 +1813,16 @@
 				var loadImage = new THREE.TextureLoader();
 				
 				// загрузка ресурсов текстур
-				particleTexture = loadImage.load(sources[0], function () {callback(countSource++, nSources)});				
-				waterNormals = loadImage.load(sources[1], function () {callback(countSource++, nSources)});
+				particleTexture = loadImage.load(sources[0], function () {toCall()});				
+				waterNormals = loadImage.load(sources[1], function () {toCall()});
 				
 				
 				
-				
-				// кэллбэк выполнится только в том случае, когда все ресурсы будут загружены
-				
-				
+				function toCall() {
+					countSource++;
+					var loaded = (countSource == nSources);
+					callback(loaded);
+				}				
 			}
 		
 			
