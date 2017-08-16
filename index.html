@@ -1795,6 +1795,7 @@
 				var sources = [];
 				sources[0] = 'cloud02.png';
 				loadSource(sources, function(a, b) {
+					console.log(a, b);
 					if (a == b) {
 						initScene();
 						tick();
