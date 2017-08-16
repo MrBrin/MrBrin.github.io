@@ -1810,7 +1810,9 @@
 				
 				// загрузка ресурсов текстур
 				particleTexture = loadImage.load(sources[0]);
-				particleTexture.onLoad = function () {
+				
+				
+				manager.onLoad = function () {
 					countSource++;
 					console.log('//', countSource);
 				};
