@@ -1808,19 +1808,16 @@
 		
 			function loadSource(sources, callback) {
 				var countSource = 0, nSources = sources.length;
-				var manager = new THREE.LoadingManager();
-				var loadAudio = new THREE.AudioLoader(manager);
-				var loadImage = new THREE.TextureLoader(manager);
+				//var manager = new THREE.LoadingManager();
+				var loadAudio = new THREE.AudioLoader();
+				var loadImage = new THREE.TextureLoader();
 				
 				// загрузка ресурсов текстур
-				particleTexture = loadImage.load(sources[0]);				
-				waterNormals = loadImage.load(sources[1]);
+				particleTexture = loadImage.load(sources[0], function () {callback(countSource++, nSources)});				
+				waterNormals = loadImage.load(sources[1], function () {callback(countSource++, nSources)});
 				
 				
-				manager.onLoad = function () {
-					countSource++;
-					callback(countSource, nSources);
-				};
+				
 				
 				// кэллбэк выполнится только в том случае, когда все ресурсы будут загружены
 				
