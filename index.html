@@ -1794,9 +1794,11 @@
 			heightMAP.onload = function () {
 				var sources = [];
 				sources[0] = 'cloud02.png';
-				loadSource(sources, function() {
-					initScene();
-					tick();	
+				loadSource(sources, function(a, b) {
+					if (a == b) {
+						initScene();
+						tick();
+					}
 				});
 			};
 			heightMAP.src = parametersOBJ.Terrain.src;
@@ -1818,10 +1820,8 @@
 				};
 				
 				// кэллбэк выполнится только в том случае, когда все ресурсы будут загружены
-				if (countSource == nSources) {
-					console.log('start');
-					callback();
-				}
+				callback(countSource, nSources);
+				
 			}
 		
 			
