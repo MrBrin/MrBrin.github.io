@@ -1789,35 +1789,39 @@
 			
 			};
 		
+			// загрузка необходимых ресурсов
+			var sources = [];
+			sources[0] = parametersOBJ.Terrain.src;
+			sources[1] = parametersOBJ.Terrain.material.map;
+			sources[2] = parametersOBJ.Terrain.material.normalMap;
+			sources[3] = parametersOBJ.WaterPlane.material.normalMap;			
+			
+			loadSource(sources, function(e) {				
+				if (e) {
+					initScene();
+					initObjects();
+					tick();
+				}
+			});
 		
-			var heightMAP = new Image();
-			heightMAP.onload = function () {
-				var sources = [];
-				sources[0] = 'cloud02.png';
-				sources[1] = 'waternormals.jpg';
-				loadSource(sources, function(e) {
-					console.log('+++' ,e);
-					if (e) {
-						initScene();
-						tick();
-					}
-				});
-			};
-			heightMAP.src = parametersOBJ.Terrain.src;
 		
 		
 			function loadSource(sources, callback) {
-				var countSource = 0, nSources = sources.length;
-				//var manager = new THREE.LoadingManager();
+				var countSource = 0, nSources = sources.length;				
 				var loadAudio = new THREE.AudioLoader();
 				var loadImage = new THREE.TextureLoader();
 				
+				// загрузка ресурса canvas-изображения (для карты высот террэйна)
+				terrainHeight = new Image();
+				terrainHeight.src = sources[0];
+				terrainHeight.onload = function () {toCall()};
+				
 				// загрузка ресурсов текстур
-				particleTexture = loadImage.load(sources[0], function () {toCall()});				
-				waterNormals = loadImage.load(sources[1], function () {toCall()});
+				terrainMap = loadImage.load(sources[1], function () {toCall()});
+				terrainMapNormal = loadImage.load(sources[2], function () {toCall()});
+				waterMapNormal = loadImage.load(sources[3], function () {toCall()});				
 				
-				
-				
+				// вызов каллбэка и проверка загрузки файлов
 				function toCall() {
 					countSource++;
 					var loaded = (countSource == nSources);
@@ -1829,20 +1833,21 @@
 		
 		
 
-			function initScene() {
-
-				// инициализируем сцену, камеру, рендерный движок
-				container = document.getElementById( 'container' );
+			function initScene() {				
+				
+				// сцена
 				scene = new THREE.Scene();
 				scene.fog = new THREE.FogExp2( 0xefd1b5, 0.0025 );
+				
+				// камера
 				camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.2, 2000000);
 				camera.position.x = -4.84;
 				camera.position.y = 4.39;
 				camera.position.z = -35.11;
 				camera.lookAt(new THREE.Vector3(0.33, -0.40, 0.85));
-				controls = new THREE.OrbitControls(camera);	
+				controls = new THREE.OrbitControls(camera); // простое управление камерой
 				
-				// создаем рендерный движок и задаем ему параметры
+				// рендерный движок
 				renderer = new THREE.WebGLRenderer( { antialias: false, alpha: true } );	
 				renderer.setPixelRatio(window.devicePixelRatio);
 				renderer.setSize(window.innerWidth, window.innerHeight);				
@@ -1850,15 +1855,26 @@
 				renderer.gammaInput = true;
 				renderer.gammaOutput = true;
 				
-				/*
-				renderer = new THREE.WebGLRenderer(); //{antialias:true}				
-				renderer.setPixelRatio(window.devicePixelRatio);
-				renderer.setSize(window.innerWidth, window.innerHeight);*/
+				// создаем html-контейнер для отображения блока в документе
+				container = document.getElementById('container');
+				container.innerHTML = "";
+				container.appendChild(renderer.domElement);
 				
+				// добавляем статистику в контейнер (fps ...)				
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild(stats.domElement);
 				
+				window.addEventListener('resize', onWindowResize, false);
 				
+			}
+		
+		
+		
+			function initObjects() {				
 				
-				// ДОБАВЛЯЕМ ДЫМОВУЮ ШАШКУ
+				// добавляем пылевые туманные облака
 				particleGroup = createFogDust(256, 50, 256, particleTexture, 32, 1, 0x111111, 1, 1);
 				particleGroup.position.set(0, 30, 0);
 				scene.add(particleGroup);
@@ -1904,24 +1920,22 @@
 				
 				// добавляем отображаемый Terrain
 				var inf = parametersOBJ.Terrain;
-				heightData = getHeightData(heightMAP, inf);
-				geometryTerrain = createTerrainMesh(heightMAP, heightData, inf);				
-				var textureLoader = new THREE.TextureLoader();
-				var map = textureLoader.load(inf.material.map);
-				var normal = textureLoader.load(inf.material.normalMap);
-				map.wrapS = map.wrapT = THREE.RepeatWrapping;
-				normal.wrapS = normal.wrapT = THREE.RepeatWrapping;
+				heightData = getHeightData(terrainHeight, inf);
+				geometryTerrain = createTerrainMesh(terrainHeight, heightData, inf);
+				terrainMap.wrapS = terrainMap.wrapT = THREE.RepeatWrapping;
+				terrainMapNormal.wrapS = terrainMapNormal.wrapT = THREE.RepeatWrapping;
 				var repeat = inf.material.repeatTexture;
 				if (repeat > 1) {
-					map.repeat.set(repeat, repeat);
-					normal.repeat.set(repeat, repeat);
+					terrainMap.repeat.set(repeat, repeat);
+					terrainMapNormal.repeat.set(repeat, repeat);
 				}
+				
 				var material = new THREE.MeshPhongMaterial( {
 					color:		inf.material.color,
 					specular:	inf.material.specular,
 					shininess:	inf.material.shininess,
-					map:		map,	
-					normalMap:	normal,
+					map:		terrainMap,	
+					normalMap:	terrainMapNormal,
 					normalScale:	new THREE.Vector2( 0.8, 0.8 )
 				} );
 				terrainMesh = new THREE.Mesh(geometryTerrain, material);
@@ -1929,15 +1943,14 @@
 				
 				
 				// добавляем водяную плоскость
-				var inf = parametersOBJ.WaterPlane;
-				
-				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+				var inf = parametersOBJ.WaterPlane;				
+				waterMapNormal.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 				var repeat = inf.material.repeatTexture;
-				if (repeat > 1) waterNormals.repeat.set(repeat, repeat);
+				if (repeat > 1) waterMapNormal.repeat.set(repeat, repeat);
 				water = new THREE.Water( renderer, camera, scene, {
 					textureWidth:	inf.size,
 					textureHeight:	inf.size,
-					waterNormals:	waterNormals,
+					waterNormals:	waterMapNormal,
 					alpha:		inf.material.alpha,
 					sunDirection:	dirLight.position.clone().normalize(),
 					sunColor:	inf.material.sunColor,
@@ -1963,7 +1976,7 @@
 				sunSphere.position.y = - 700000;
 				sunSphere.visible = false;
 				scene.add(sunSphere);				
-				var distance = inf.distanceSun;
+				settings_Sky();
 				function settings_Sky() {
 					var uniforms = sky.uniforms;
 					uniforms.turbidity.value = inf.turbidity;
@@ -1971,6 +1984,7 @@
 					uniforms.luminance.value = inf.luminance;
 					uniforms.mieCoefficient.value = inf.mieCoefficient;
 					uniforms.mieDirectionalG.value = inf.mieDirectionalG;
+					var distance = inf.distanceSun;
 					var theta = Math.PI * (inf.inclination - 0.5);
 					var phi = 2 * Math.PI * (inf.azimuth - 0.5);
 					sunSphere.position.x = distance * Math.cos(phi);
@@ -1980,20 +1994,14 @@
 					sky.uniforms.sunPosition.value.copy(sunSphere.position);
 					renderer.render(scene, camera);
 				}				
-				settings_Sky();
 				
 				
 				
 				
 				
-				// добавляем рендерный движок и статистику в документ
-				container.innerHTML = "";
-				container.appendChild(renderer.domElement);
-				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				container.appendChild(stats.domElement);
-				window.addEventListener('resize', onWindowResize, false);				
+				
+				
+								
 				
 
 				// добавляем интерфейс управления террейном
