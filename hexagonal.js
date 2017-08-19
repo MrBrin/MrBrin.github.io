@@ -13,8 +13,7 @@ bkcore =
 
 			tDiffuse: { type: "t", value: 0, texture: null },
 			tHex: {type: "t", value: 1, texture: null},
-			sizeW: {type: "f", value: 512.0}, //
-			sizeH: {type: "f", value: 512.0}, //
+			size: {type: "f", value: 512.0},		
 			rx: {type: "f", value: 1600.0},
 			ry: {type: "f", value: 900.0},
 			color: {type: "c", value: new THREE.Color(0x458ab1)}
@@ -35,8 +34,7 @@ bkcore =
 
 		fragmentShader: [
 
-			"uniform float sizeW;", //
-			"uniform float sizeH;", //
+			"uniform float size;",
 			"uniform float rx;",
 			"uniform float ry;",
 
@@ -52,8 +50,8 @@ bkcore =
 				"vec4 vcolor = vec4(color,1.0);",
 
 				"vec2 hexuv;",
-				"hexuv.x = mod(vUv.x * rx, sizeW) / sizeW;", //
-				"hexuv.y = mod(vUv.y * ry, sizeH) / sizeH;", //
+				"hexuv.x = mod(vUv.x * rx, size) / size;",
+				"hexuv.y = mod(vUv.y * ry, size) / size;",
 				"vec4 hex = texture2D( tHex, hexuv );",
 
 				"float tolerance = 0.2;",
