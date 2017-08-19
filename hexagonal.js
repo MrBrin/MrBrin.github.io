@@ -3,6 +3,9 @@
  * Hexagonal Vignette shader
 */
 
+
+
+
 var bkcore = bkcore || {};
 
 bkcore =
@@ -11,8 +14,16 @@ bkcore =
 
 		uniforms: {
 
-			tDiffuse: { type: "t", value: 0, texture: null },
-			tHex: {type: "t", value: 1, texture: null},
+			tDiffuse: { 
+				type: "t",
+				value: 0,
+				texture: THREE.ImageUtils.loadTexture('res/hex-tex2.jpg', undefined, function(){console.log('ded')})
+			},
+			tHex: {
+				type: "t",
+				value: 1,
+				texture:  THREE.ImageUtils.loadTexture('res/hex-tex2.jpg', undefined, function(){console.log('ded2')})
+			},
 			size: {type: "f", value: 512.0},		
 			rx: {type: "f", value: 1600.0},
 			ry: {type: "f", value: 900.0},
