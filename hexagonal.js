@@ -52,8 +52,8 @@ bkcore =
 				"vec4 vcolor = vec4(color,1.0);",
 
 				"vec2 hexuv;",
-				"hexuv.x = mod(vUv.x * rx, sizeW) / sizeW;", //
-				"hexuv.y = mod(vUv.y * ry, sizeH) / sizeH;", //
+				"hexuv.x = 1.0;", //
+				"hexuv.y = 1.0;", //
 				"vec4 hex = texture2D( tHex, hexuv );",
 
 				"float tolerance = 0.2;",
