@@ -13,10 +13,10 @@ bkcore =
 
 			tDiffuse: { type: "t", value: 0, texture: null },
 			tHex: {type: "t", value: 1, texture: null},
-			sizeW: {type: "f", value: 1920.0}, //
-			sizeH: {type: "f", value: 1080.0}, //
-			rx: {type: "f", value: 1024.0},
-			ry: {type: "f", value: 768.0},
+			sizeW: {type: "f", value: 1600.0}, //
+			sizeH: {type: "f", value: 900.0}, //
+			rx: {type: "f", value: 1600.0},
+			ry: {type: "f", value: 900.0},
 			color: {type: "c", value: new THREE.Color(0x458ab1)}
 
 		},
