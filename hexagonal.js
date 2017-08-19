@@ -17,12 +17,12 @@ bkcore =
 			tDiffuse: { 
 				type: "t",
 				value: 0,
-				texture: THREE.ImageUtils.loadTexture('res/hex-tex2.jpg', undefined, function(){console.log('ded')})
+				texture: THREE.ImageUtils.loadTexture('hex-tex2.jpg', undefined, function(){console.log('ded')})
 			},
 			tHex: {
 				type: "t",
 				value: 1,
-				texture:  THREE.ImageUtils.loadTexture('res/hex-tex2.jpg', undefined, function(){console.log('ded2')})
+				texture:  THREE.ImageUtils.loadTexture('hex-tex2.jpg', undefined, function(){console.log('ded2')})
 			},
 			size: {type: "f", value: 512.0},		
 			rx: {type: "f", value: 1600.0},
