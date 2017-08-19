@@ -13,8 +13,8 @@ bkcore =
 
 			tDiffuse: { type: "t", value: 0, texture: null },
 			tHex: {type: "t", value: 1, texture: null},
-			sizeW: {type: "f", value: 1600.0}, //
-			sizeH: {type: "f", value: 900.0}, //
+			sizeW: {type: "f", value: 512.0}, //
+			sizeH: {type: "f", value: 512.0}, //
 			rx: {type: "f", value: 1600.0},
 			ry: {type: "f", value: 900.0},
 			color: {type: "c", value: new THREE.Color(0x458ab1)}
@@ -52,8 +52,8 @@ bkcore =
 				"vec4 vcolor = vec4(color,1.0);",
 
 				"vec2 hexuv;",
-				"hexuv.x = 1.0;", //
-				"hexuv.y = 1.0;", //
+				"hexuv.x = mod(vUv.x * rx, sizeW) / sizeW;", //
+				"hexuv.y = mod(vUv.y * ry, sizeH) / sizeH;", //
 				"vec4 hex = texture2D( tHex, hexuv );",
 
 				"float tolerance = 0.2;",
