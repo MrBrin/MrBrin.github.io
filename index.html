@@ -1737,6 +1737,8 @@
 			var sunSphere, sky;
 			var smokeParticles, smoke, particleGroup;
 			var CloudShader, particleTexture, waterNormals;
+		
+			var terrainHeight, terrainMap, terrainMapNormal, waterMapNormal;
 
 		
 			// параметры глобальных объектов карты
@@ -1794,7 +1796,8 @@
 			sources[0] = parametersOBJ.Terrain.src;
 			sources[1] = parametersOBJ.Terrain.material.map;
 			sources[2] = parametersOBJ.Terrain.material.normalMap;
-			sources[3] = parametersOBJ.WaterPlane.material.normalMap;			
+			sources[3] = parametersOBJ.WaterPlane.material.normalMap;
+			sources[4] = 'cloud01.png';
 			
 			loadSource(sources, function(e) {				
 				if (e) {
@@ -1819,7 +1822,8 @@
 				// загрузка ресурсов текстур
 				terrainMap = loadImage.load(sources[1], function () {toCall()});
 				terrainMapNormal = loadImage.load(sources[2], function () {toCall()});
-				waterMapNormal = loadImage.load(sources[3], function () {toCall()});				
+				waterMapNormal = loadImage.load(sources[3], function () {toCall()});
+				particleTexture = loadImage.load(sources[4], function () {toCall()});
 				
 				// вызов каллбэка и проверка загрузки файлов
 				function toCall() {
@@ -1944,7 +1948,7 @@
 				
 				// добавляем водяную плоскость
 				var inf = parametersOBJ.WaterPlane;				
-				waterMapNormal.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+				waterMapNormal.wrapS = waterMapNormal.wrapT = THREE.RepeatWrapping;
 				var repeat = inf.material.repeatTexture;
 				if (repeat > 1) waterMapNormal.repeat.set(repeat, repeat);
 				water = new THREE.Water( renderer, camera, scene, {
@@ -2115,7 +2119,7 @@
 		
 			// обновление геометрии террейна (для активного изменения ландшафта через интерфейс)
 			function reOptionTerrain() {
-				heightData = getHeightData(heightMAP, parametersOBJ.Terrain);				
+				heightData = getHeightData(terrainHeight, parametersOBJ.Terrain);				
 				var geometry = createTerrainMesh(heightMAP, heightData, parametersOBJ.Terrain);				
 				terrainMesh.geometry.dispose();				
 				terrainMesh.geometry = geometry;
