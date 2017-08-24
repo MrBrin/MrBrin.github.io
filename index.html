@@ -1990,6 +1990,7 @@
 				scene.add(mirrorMesh);
 				
 				// добавляем небо
+				/*
 				var inf = parametersOBJ.Sky;
 				sky = new THREE.Sky();
 				scene.add(sky.mesh);				
@@ -2017,7 +2018,9 @@
 					sunSphere.visible = inf.sun;
 					sky.uniforms.sunPosition.value.copy(sunSphere.position);
 					renderer.render(scene, camera);
-				}				
+				}*/
+				
+				myLib.Sky.add(parametersOBJ.Sky, renderer, scene, camera);
 				
 				
 				
