@@ -1,6 +1,6 @@
 /**
  * @autor: mr.gifo (vk.com/mr.gifo)
- * библиотека 'myLib' для текущего проекта с описанием методов для специфичных объектов сцены
+ * ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГ  'myLib' Г¤Г«Гї ГІГҐГЄГіГ№ГҐГЈГ® ГЇГ°Г®ГҐГЄГІГ  Г± Г®ГЇГЁГ±Г Г­ГЁГҐГ¬ Г¬ГҐГІГ®Г¤Г®Гў Г¤Г«Гї Г±ГЇГҐГ¶ГЁГґГЁГ·Г­Г»Гµ Г®ГЎГєГҐГЄГІГ®Гў Г±Г¶ГҐГ­Г»
  */
 
 
@@ -15,6 +15,7 @@ var myLib = {
 	},
 
 	Water: {
+		Water,
 		geometry: {},
 		material: {}
 	},
@@ -29,7 +30,7 @@ var myLib = {
 
 
 
-// методы для работы с Terrain
+// Г¬ГҐГІГ®Г¤Г» Г¤Г«Гї Г°Г ГЎГ®ГІГ» Г± Terrain
 
 myLib.Terrain.heightData = function(img, parameters) {
 	var minH = parameters.heightMin, maxH = parameters.heightMax;
@@ -86,7 +87,7 @@ myLib.Terrain.material.create = function(parameters, terrainMap, terrainMapNorma
 
 
 
-// методы для работы с Water
+// Г¬ГҐГІГ®Г¤Г» Г¤Г«Гї Г°Г ГЎГ®ГІГ» Г± Water
 
 myLib.Water.geometry.create = function(parameters) {	
 	var k = 0;
@@ -142,13 +143,18 @@ myLib.Water.material.create = function(parameters, waterMapNormal, renderer, cam
 		distortionScale:parameters.material.distortionScale,
 		fog:		scene.fog != undefined
 	});
+	myLib.Water.Water = water;
 	return water.material;
+}
+
+myLib.Water.material.shader = function() {
+	return myLib.Water.Water;
 }
 
 
 
 
-// методы для работы с Sky
+// Г¬ГҐГІГ®Г¤Г» Г¤Г«Гї Г°Г ГЎГ®ГІГ» Г± Sky
 
 myLib.Sky.add = function(parameters, renderer, scene, camera) {	
 	var sky = new THREE.Sky();
@@ -183,7 +189,7 @@ myLib.Sky.add = function(parameters, renderer, scene, camera) {
 
 
 
-// методы для работы с DustFog
+// Г¬ГҐГІГ®Г¤Г» Г¤Г«Гї Г°Г ГЎГ®ГІГ» Г± DustFog
 
 myLib.DustFog.create = function(width, height, depth, texture, scale, total, color, alpha, blendMode) {	
 	var blendings = [ "NoBlending", "NormalBlending", "AdditiveBlending", "SubtractiveBlending", "MultiplyBlending" ];
