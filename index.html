@@ -1880,10 +1880,12 @@
 			function initObjects() {				
 				
 				// добавляем пылевые туманные облака
-				particleGroup = createFogDust(256, 50, 256, particleTexture, 32, 1, 0x111111, 1, 1);
+				particleGroup = myLib.DustFog.create(256, 50, 256, particleTexture, 32, 10, 0x111111, 1, 1);
 				particleGroup.position.set(0, 30, 0);
 				scene.add(particleGroup);
 				
+				
+				/*
 				function createFogDust(width, height, depth, texture, scale, total, color, alpha, blendMode) {
 					var blendings = [ "NoBlending", "NormalBlending", "AdditiveBlending", "SubtractiveBlending", "MultiplyBlending" ];
 					var blending = blendings[blendMode];
@@ -1906,7 +1908,7 @@
 						particleGroup.add(sprite);
 					}					
 					return particleGroup;
-				}
+				}*/
 				
 				
 				// добавляем шейдер облаков
