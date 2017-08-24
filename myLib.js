@@ -15,7 +15,7 @@ var myLib = {
 	},
 
 	Water: {
-		Water,
+		Water: undefined,
 		geometry: {},
 		material: {}
 	},
