@@ -1958,6 +1958,7 @@
 				
 				
 				// добавляем водяную плоскость
+				/*
 				var inf = parametersOBJ.WaterPlane;				
 				waterMapNormal.wrapS = waterMapNormal.wrapT = THREE.RepeatWrapping;
 				var repeat = inf.material.repeatTexture;
@@ -1977,8 +1978,14 @@
 				mirrorMesh = new THREE.Mesh(geometryWater, water.material);
 				mirrorMesh.rotation.x = Math.PI;
 				mirrorMesh.add(water);				
-				scene.add(mirrorMesh);
+				scene.add(mirrorMesh);*/
 				
+				var material = myLib.Water.material.create(parametersOBJ.WaterPlane, waterMapNormal, renderer, camera, scene, dirLight);
+				geometryWater = myLib.Water.geometry.create(parametersOBJ.WaterPlane);
+				mirrorMesh = new THREE.Mesh(geometryWater, material);
+				mirrorMesh.rotation.x = Math.PI;
+				mirrorMesh.add(myLib.Water.material.shader());				
+				scene.add(mirrorMesh);
 				
 				// добавляем небо
 				var inf = parametersOBJ.Sky;
@@ -2058,8 +2065,13 @@
 				
 				CloudShader.update();
 				
-				updateWaterPlane(parametersOBJ.WaterPlane);
-				water.render();
+				//updateWaterPlane(parametersOBJ.WaterPlane);
+				//water.render();
+				
+				myLib.Water.geometry.update(mirrorMesh.geometry, parametersOBJ.WaterPlane);
+				myLib.Water.update(mirrorMesh);
+				myLib.Water.material.shader().render();
+				
 				
 				/*var particleCount = smokeParticles.vertices.length;
 				while (particleCount--) {
