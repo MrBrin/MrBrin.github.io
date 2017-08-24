@@ -1926,6 +1926,7 @@
 
 				
 				// добавляем отображаемый Terrain
+				/*
 				var inf = parametersOBJ.Terrain;
 				heightData = getHeightData(terrainHeight, inf);
 				geometryTerrain = createTerrainMesh(terrainHeight, heightData, inf);
@@ -1946,7 +1947,14 @@
 					normalScale:	new THREE.Vector2( 0.8, 0.8 )
 				} );
 				terrainMesh = new THREE.Mesh(geometryTerrain, material);
+				scene.add(terrainMesh);*/
+				
+				heightData = myLib.Terrain.heightData(terrainHeight, parametersOBJ.Terrain);
+				geometryTerrain = myLib.Terrain.geometry.create(terrainHeight, heightData, parametersOBJ.Terrain);
+				var material = myLib.Terrain.material.create(parametersOBJ.Terrain, terrainMap, terrainMapNormal);
+				terrainMesh = new THREE.Mesh(geometryTerrain, material);
 				scene.add(terrainMesh);
+				
 				
 				
 				// добавляем водяную плоскость
