@@ -1985,7 +1985,7 @@
 				var material = myLib.Water.material.create(parametersOBJ.WaterPlane, waterMapNormal, renderer, camera, scene, dirLight);
 				geometryWater = myLib.Water.geometry.create(parametersOBJ.WaterPlane);
 				mirrorMesh = new THREE.Mesh(geometryWater, material);
-				mirrorMesh.rotation.x = Math.PI;
+				//mirrorMesh.rotation.x = Math.PI;
 				mirrorMesh.add(myLib.Water.Water);				
 				scene.add(mirrorMesh);
 				
