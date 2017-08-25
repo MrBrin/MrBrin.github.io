@@ -97,10 +97,10 @@ myLib.Water.geometry.create = function(parameters) {
 	var hS = parameters.heightScale;
 	var geometry = new THREE.PlaneGeometry(M, M, N - 1, N - 1);
 	for (var i = 0; i < N; i++) {
-		for (var j = N - 1; j == 0; j++) {						
+		for (var j = 0; j < N; j++) {						
 			geometry.vertices[k].x = (i - (N-1)/2) * M/(N-1);
 			geometry.vertices[k].y = (Math.cos((i/N) * Math.PI * h) + Math.sin((j/N) * Math.PI * h)) / hS;
-			geometry.vertices[k].z = (j - (N-1)/2) * M/(N-1);
+			geometry.vertices[k].z = ((N - 1 - j) - (N-1)/2) * M/(N-1);
 			k++;
 		}
 	}
